@@ -2,8 +2,21 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.dsers/dsers-mcp-server",
   "title": "DSers Official MCP Server",
-  "description": "Official DSers MCP server for AI-powered dropshipping automation, including product import, variant editing, pricing rules, and publishing to Shopify, Wix, and WooCommerce.",
+  "description": "Official DSers MCP for dropshipping: import, edit, price, and publish products to Shopify and Wix.",
   "version": "1.0.0",
+  "websiteUrl": "https://www.dsers.com",
+  "icons": [
+    {
+      "src": "https://img.dsers.com/images/logo.png",
+      "mimeType": "image/png",
+      "sizes": ["218x56"]
+    },
+    {
+      "src": "https://img.dsers.com/images/logo.svg",
+      "mimeType": "image/svg+xml",
+      "sizes": ["any"]
+    }
+  ],
   "repository": {
     "url": "https://github.com/dsers/dsers-mcp-server",
     "source": "github"

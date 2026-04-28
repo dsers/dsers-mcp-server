@@ -38,7 +38,9 @@ You need:
 - At least one Shopify or Wix store connected in DSers
 - An MCP client that supports remote HTTP MCP and OAuth 2.1 + PKCE
 
-Verified or expected clients include Claude Desktop, Cursor, Claude Code, Codex CLI, VS Code/Cline/Windsurf/Zed/Continue, and OpenClaw.
+Verified clients (tested end to end): Claude Desktop, Cursor, Claude Code, Codex CLI, OpenClaw.
+
+Expected to work (any MCP client with remote HTTP + OAuth 2.1 + PKCE support): VS Code, Cline, Windsurf, Zed, Continue.
 
 ## What You Can Do
 

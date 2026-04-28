@@ -38,7 +38,9 @@ DSers MCP 使用 OAuth 2.1 + PKCE。
 - DSers 已连接至少一个 Shopify 或 Wix 店铺
 - 一个支持远程 HTTP MCP 和 OAuth 2.1 + PKCE 的 MCP 客户端
 
-已验证或预期可用的客户端包括 Claude Desktop、Cursor、Claude Code、Codex CLI、VS Code/Cline/Windsurf/Zed/Continue、OpenClaw。
+已验证客户端（端到端测试通过）：Claude Desktop、Cursor、Claude Code、Codex CLI、OpenClaw。
+
+预期可用（具备远程 HTTP + OAuth 2.1 + PKCE 支持的 MCP 客户端）：VS Code、Cline、Windsurf、Zed、Continue。
 
 ## 可实现能力
 

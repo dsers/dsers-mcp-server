@@ -15,8 +15,3 @@ Thumbs.db
 *.pem
 *.key
 *.crt
-
-# Dependencies / build artifacts
-node_modules/
-dist/
-build/
