@@ -36,7 +36,7 @@ https://mcp.dsers.com/dropshipping/mcp
 | Claude Code | 可用 | `claude mcp add` |
 | Codex CLI | 可用 | `codex mcp login` |
 | VS Code / Cline / Windsurf / Zed / Continue | 预期可用 | 需要支持 OAuth MCP |
-| OpenClaw | 可用 | 可通过 OpenClaw MCP registry 或 AgentHotspot / ClawHub 等社区 MCP 目录接入 |
+| OpenClaw | 可用 | 可通过 OpenClaw MCP registry 或当前可用的社区 MCP 目录接入 |
 
 客户端选择原则：
 
@@ -114,7 +114,7 @@ OpenClaw 可以通过 MCP registry 保存远程 MCP server 配置。自托管或
 openclaw mcp set dsers '{"url":"https://mcp.dsers.com/dropshipping/mcp","transport":"streamable-http"}'
 ```
 
-也可以通过 AgentHotspot、ClawHub 等社区 MCP 目录添加 DSers MCP。不同 OpenClaw 部署形态支持的 transport 和授权入口可能不同，按当前环境的连接向导完成配置。
+也可以通过当前可用的社区 MCP 目录添加 DSers MCP。这些目录不是 DSers 运营的服务，请以对应目录的当前连接说明为准，并优先使用上方 DSers 官方 MCP endpoint。
 
 ## 4. 认证模型
 
@@ -458,7 +458,7 @@ DSers MCP 使用 OAuth 2.1 + PKCE。不要手动配置 API key，也不要手动
 | --- | --- |
 | `dsers_workflow_quick-import` | 单商品导入并推送草稿 |
 | `dsers_workflow_bulk-import` | 多商品批量导入并套价格倍率 |
-| `dsers_workflow_multi-push` | 一个商品推送到所有连接店铺 |
+| `dsers_workflow_multi-push` | 一个商品推送到所有已连接 Shopify/Wix 店铺 |
 | `dsers_workflow_seo-optimize` | 导入后由 LLM 改标题/描述，再推送 |
 
 这些是客户端可选的快捷工作流，不是必须调用的工具。

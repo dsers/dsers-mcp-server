@@ -163,6 +163,12 @@ This public documentation and metadata repository is licensed under the [Apache 
 
 ## Support
 
-For support, contact:
+For non-sensitive documentation, connection, client compatibility, or usage questions, open a GitHub issue:
+
+```text
+https://github.com/dsers/dsers-mcp-server/issues
+```
+
+For vulnerabilities, tokens, or account-specific data, contact:
 
 zhaohaoduo@dsers.com

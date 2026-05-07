@@ -322,7 +322,7 @@ DSers Official MCP Server 提供面向 dropshipping 工作流的 AI 工具。
 | --- | --- |
 | `dsers_workflow_quick-import` | 单商品导入并推送草稿 |
 | `dsers_workflow_bulk-import` | 多商品批量导入并套价格倍率 |
-| `dsers_workflow_multi-push` | 一个商品推送到所有连接店铺 |
+| `dsers_workflow_multi-push` | 一个商品推送到所有已连接 Shopify/Wix 店铺 |
 | `dsers_workflow_seo-optimize` | 导入后由 LLM 改标题/描述，再推送 |
 
 这些是客户端可选的快捷工作流，不是必须调用的工具。

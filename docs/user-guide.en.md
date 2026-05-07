@@ -36,7 +36,7 @@ Verified or expected clients:
 | Claude Code | Works | `claude mcp add` |
 | Codex CLI | Works | `codex mcp login` |
 | VS Code / Cline / Windsurf / Zed / Continue | Expected | Requires OAuth-capable MCP support |
-| OpenClaw | Works | Can connect through the OpenClaw MCP registry or community MCP directories such as AgentHotspot / ClawHub |
+| OpenClaw | Works | Can connect through the OpenClaw MCP registry or community MCP directories where available |
 
 Client selection rules:
 
@@ -114,7 +114,7 @@ OpenClaw can save remote MCP server definitions through its MCP registry. For se
 openclaw mcp set dsers '{"url":"https://mcp.dsers.com/dropshipping/mcp","transport":"streamable-http"}'
 ```
 
-You can also add DSers MCP through community MCP directories such as AgentHotspot or ClawHub. Transport and authorization support can vary by OpenClaw deployment, so follow the connection guide for your current environment.
+You can also add DSers MCP through community MCP directories where available. Those directories are not operated by DSers; follow their current connection guide and prefer the official DSers MCP endpoint shown above.
 
 ## 4. Authentication Model
 
@@ -458,7 +458,7 @@ The server also exposes four prompt/workflow templates:
 | --- | --- |
 | `dsers_workflow_quick-import` | Import one product and push it as a draft |
 | `dsers_workflow_bulk-import` | Batch import products with a pricing multiplier |
-| `dsers_workflow_multi-push` | Push one product to all linked stores |
+| `dsers_workflow_multi-push` | Push one product to all connected Shopify or Wix stores |
 | `dsers_workflow_seo-optimize` | Import, rewrite title/description with the LLM, then push |
 
 These are optional client-side workflow shortcuts, not required tool calls.

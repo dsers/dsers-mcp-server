@@ -58,6 +58,14 @@ The review account must be able to complete OAuth without MFA, SMS, email challe
 
 Do not provide API keys, cookies, manual Authorization headers, or DSers passwords in the submission text.
 
+Before submitting, test the demo account from outside DSers internal networks and confirm that the credentials are not expired.
+
+## Commerce Safety
+
+The ChatGPT App workflow manages merchant catalog drafts and store-push operations only. It does not perform checkout, supplier purchasing, invoice payment, or order settlement.
+
+Negative tests should confirm the app refuses prohibited or regulated goods requests and does not call DSers tools for adult sexual goods, gambling products, drugs, CBD/THC or drug paraphernalia, prescription or age-restricted medications, counterfeit or replica goods, malware or surveillance products, tobacco or nicotine products, weapons, fake IDs, fraud tools, or other high-risk services.
+
 ## Review Test Coverage
 
 Use [`chatgpt-app-submission.json`](../chatgpt-app-submission.json) for dashboard import and [`docs/chatgpt-app-e2e-playbook.md`](chatgpt-app-e2e-playbook.md) for manual replay.
@@ -76,7 +84,7 @@ The minimum test set covers:
 - alternate supplier list
 - SKU remap preview
 - import-list delete confirmation
-- negative prompts for unrelated tasks, credentials, payments, unsafe publish, and no-preview supplier replacement
+- negative prompts for unrelated tasks, credentials, payments, prohibited goods, unsafe publish, and no-preview supplier replacement
 
 ## Maintenance
 

@@ -322,7 +322,7 @@ The server also exposes four prompt/workflow templates:
 | --- | --- |
 | `dsers_workflow_quick-import` | Import one product and push it as a draft |
 | `dsers_workflow_bulk-import` | Batch import products with a pricing multiplier |
-| `dsers_workflow_multi-push` | Push one product to all linked stores |
+| `dsers_workflow_multi-push` | Push one product to all connected Shopify or Wix stores |
 | `dsers_workflow_seo-optimize` | Import, rewrite title/description with the LLM, then push |
 
 These are optional client-side workflow shortcuts, not required tool calls.

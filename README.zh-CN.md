@@ -163,6 +163,12 @@ openclaw mcp set dsers '{"url":"https://mcp.dsers.com/dropshipping/mcp","transpo
 
 ## Support
 
-如需支持，请联系：
+普通文档、连接、客户端兼容性或使用问题，请提交 GitHub Issue：
+
+```text
+https://github.com/dsers/dsers-mcp-server/issues
+```
+
+漏洞、token 或账号敏感数据问题，请联系：
 
 zhaohaoduo@dsers.com

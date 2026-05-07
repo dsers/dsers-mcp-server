@@ -4,7 +4,7 @@
   "display_name": "DSers Official MCP Server",
   "version": "1.8.1",
   "description": "Official DSers MCP for dropshipping: import, edit, price, and publish products to Shopify and Wix",
-  "long_description": "An MCP server that lets AI agents automate the DSers dropshipping workflow. Paste a product link from AliExpress, Alibaba, 1688, or Accio.com — your AI agent imports it, applies pricing rules, cleans up the title, and pushes it to a connected Shopify or Wix store. Supports bulk import, multi-store push, SEO optimization, and pre-push safety checks.",
+  "long_description": "An MCP server that lets AI agents automate the DSers dropshipping workflow. Paste a product link from AliExpress, Alibaba, 1688, or Accio.com — your AI agent imports it, applies pricing rules, cleans up the title, and pushes it to a connected Shopify or Wix store. Supports bulk import, multi-store push, SEO optimization, and pre-push pricing and stock checks.",
   "author": {
     "name": "DSers",
     "url": "https://github.com/dsers"
@@ -16,7 +16,7 @@
   "homepage": "https://github.com/dsers/dsers-mcp-server",
   "documentation": "https://github.com/dsers/dsers-mcp-server#readme",
   "support": "https://github.com/dsers/dsers-mcp-server/issues",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "privacy_policies": [
     "https://mcp.dsers.com/privacy-policy"
   ],
@@ -39,16 +39,6 @@
       "url": "https://mcp.dsers.com/dropshipping/mcp"
     }
   ],
-  "compatibility": {
-    "platforms": [
-      "darwin",
-      "win32",
-      "linux"
-    ],
-    "runtimes": {
-      "node": ">=20.0.0"
-    }
-  },
   "tools": [
     {
       "name": "dsers_store_discover",
@@ -129,7 +119,7 @@
       "arguments": [
         "product_url"
       ],
-      "text": "Import this product and push it to ALL my stores:\n${arguments.product_url}\n\nSteps: 1) dsers_store_discover — list all stores. 2) dsers_product_import. 3) dsers_store_push with all stores."
+      "text": "Import this product and push it to all connected Shopify or Wix stores returned by dsers_store_discover:\n${arguments.product_url}\n\nSteps: 1) dsers_store_discover — list Shopify or Wix stores. 2) dsers_product_import. 3) dsers_store_push with those stores."
     },
     {
       "name": "dsers_workflow_seo-optimize",
