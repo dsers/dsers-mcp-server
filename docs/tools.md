@@ -14,14 +14,18 @@ Common input:
 
 Key output:
 
+- `store_discovery.state`
 - `stores[].id`
 - `stores[].name`
 - `stores[].platform`
+- `stores[].currency`
 - `stores[].ship`
 - `rules.pricing`
 - `rules.content`
 - `rules.images`
 - `plan_issue`
+
+`store_discovery.state` helps clients distinguish connected stores from missing stores, authorization problems, upstream failures, unrecognized response shapes, and target-store misses. Successful discovery may also include `mcp_update` guidance when the client should refresh, reauthorize, or reinstall the MCP connection.
 
 ## Rule Validation
 
@@ -145,6 +149,7 @@ Merge behavior:
 - `pricing`, `images`, and `variant_overrides` replace their rule family.
 - `title_prefix`, `title_suffix`, and `description_append_html` are slots; each new value replaces the old slot value.
 - `option_edits` is a full replacement, not an incremental merge.
+- `remove_value` option edits remove the matching draft variants.
 - Use `{"pricing": null}` to remove a whole rule family.
 
 If persisting rules to DSers fails, the tool returns an error to prevent later pushes from using stale draft values.
@@ -196,7 +201,7 @@ Key output:
 
 ### `dsers_store_push`
 
-Pushes import drafts to Shopify or Wix.
+Pushes import drafts to connected Shopify, Wix, or WooCommerce stores when supported by DSers.
 
 Common input:
 
@@ -243,9 +248,43 @@ Protocol:
 2. Show the confirmation response to the user.
 3. Call again with `confirm=true` only after explicit approval.
 
-This does not delete already published Shopify or Wix listings.
+This does not delete already published storefront listings.
+
+## Inventory Policy
+
+### `dsers_inventory_policy_get`
+
+Reads the DSers account inventory sync policy.
+
+Key output:
+
+- supplier product unavailable behavior
+- single variant unavailable behavior
+- auto-sync stock behavior
+- plain-language labels for each setting
+
+This is read-only and does not change account settings.
 
 ## Supplier Replacement
+
+### `dsers_alt_supplier_list`
+
+Lists the primary and alternate suppliers mapped to an existing DSers product.
+
+Common input:
+
+- `dsers_product_id`
+- `variant_detail`
+
+Key output:
+
+- supplier URL
+- supplier platform and app ID
+- product title and image
+- variant count
+- supplier-native currency and currency source
+
+Use this before choosing a supplier URL for `dsers_sku_remap`.
 
 ### `dsers_sku_remap`
 

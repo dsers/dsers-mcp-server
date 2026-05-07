@@ -14,14 +14,18 @@ DSers Official MCP Server 提供面向 dropshipping 工作流的 AI 工具。
 
 返回重点：
 
+- `store_discovery.state`
 - `stores[].id`
 - `stores[].name`
 - `stores[].platform`
+- `stores[].currency`
 - `stores[].ship`
 - `rules.pricing`
 - `rules.content`
 - `rules.images`
 - `plan_issue`
+
+`store_discovery.state` 用于区分已连接店铺、无店铺、授权问题、上游异常、响应结构变化和目标店铺未命中。成功发现店铺时，也可能返回 `mcp_update`，提示客户端刷新工具、重新授权或重装 MCP 连接。
 
 ## 规则校验
 
@@ -145,6 +149,7 @@ DSers Official MCP Server 提供面向 dropshipping 工作流的 AI 工具。
 - `pricing`、`images`、`variant_overrides` 按 family 替换。
 - `title_prefix`、`title_suffix`、`description_append_html` 是 slot，重复调用会替换旧 slot。
 - `option_edits` 是完整替换，不是增量合并。
+- `remove_value` option edit 会删除匹配的 draft variants。
 - 传 `{"pricing": null}` 可移除该规则 family。
 
 如果规则持久化到 DSers 失败，工具会报错，避免后续 push 使用旧 draft。
@@ -196,7 +201,7 @@ DSers Official MCP Server 提供面向 dropshipping 工作流的 AI 工具。
 
 ### `dsers_store_push`
 
-把 import draft 推送到 Shopify 或 Wix。
+把 import draft 推送到 DSers 支持的已连接 Shopify、Wix 或 WooCommerce 店铺。
 
 常用参数：
 
@@ -243,9 +248,43 @@ DSers Official MCP Server 提供面向 dropshipping 工作流的 AI 工具。
 2. 把返回的确认信息展示给用户。
 3. 用户明确确认后，再传 `confirm=true`。
 
-注意：它只删除 DSers import list 中的 draft，不删除 Shopify/Wix 已上架商品。
+注意：它只删除 DSers import list 中的 draft，不删除已经发布到店铺前台的商品。
+
+## 库存策略
+
+### `dsers_inventory_policy_get`
+
+读取 DSers 账号库存同步策略。
+
+返回重点：
+
+- 供应商商品不可用时的处理方式
+- 单个 variant 不可用时的处理方式
+- 是否自动同步库存
+- 每个设置的可读标签
+
+这是只读工具，不会修改账号设置。
 
 ## 供应商替换
+
+### `dsers_alt_supplier_list`
+
+列出某个 DSers 商品已经绑定的主供应商和备选供应商。
+
+常用参数：
+
+- `dsers_product_id`
+- `variant_detail`
+
+返回重点：
+
+- 供应商 URL
+- 供应商平台和 app ID
+- 商品标题和图片
+- variant 数量
+- 供应商原生币种和币种来源
+
+选择要传给 `dsers_sku_remap` 的供应商 URL 前，建议先调用这个工具。
 
 ### `dsers_sku_remap`
 

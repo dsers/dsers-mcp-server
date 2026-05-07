@@ -67,8 +67,10 @@ https://mcp.dsers.com/dropshipping/mcp
 
 ## OpenClaw
 
-```bash
-openclaw mcp set dsers '{"url":"https://mcp.dsers.com/dropshipping/mcp","transport":"streamable-http"}'
+OpenClaw support varies by deployment. If your OpenClaw runtime supports remote HTTP MCP and OAuth, use its MCP registry or community gateway flow with:
+
+```text
+https://mcp.dsers.com/dropshipping/mcp
 ```
 
 ## Recommended Workflows

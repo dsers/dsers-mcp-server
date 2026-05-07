@@ -14,7 +14,7 @@ Typical use cases:
 
 - Import products from AliExpress, Alibaba, 1688, or Accio into the DSers import list
 - Apply pricing, title, description, image, and variant rules
-- Preview DSers drafts before pushing to Shopify or Wix
+- Preview DSers drafts before pushing to connected stores
 - Search the DSers product pool
 - Browse import-list drafts and already pushed products
 - Replace suppliers on existing store products with SKU-level matching
@@ -24,7 +24,7 @@ Typical use cases:
 You need:
 
 - A DSers account
-- At least one Shopify or Wix store connected in DSers
+- At least one Shopify, Wix, or WooCommerce store connected in DSers
 - An MCP client with remote HTTP MCP and OAuth support
 
 Verified or expected clients:
@@ -36,14 +36,14 @@ Verified or expected clients:
 | Claude Code | Works | `claude mcp add` |
 | Codex CLI | Works | `codex mcp login` |
 | VS Code / Cline / Windsurf / Zed / Continue | Expected | Requires OAuth-capable MCP support |
-| OpenClaw | Works | Can connect through the OpenClaw MCP registry or community MCP directories such as AgentHotspot / ClawHub |
+| OpenClaw | Varies | Some deployments can connect through the OpenClaw MCP registry or community MCP directories such as AgentHotspot / ClawHub; remote OAuth support depends on the current runtime |
 
 Client selection rules:
 
 - This MCP is a remote HTTP service. It does not provide a local stdio server.
 - The client must support OAuth 2.1 + PKCE for remote MCP.
-- If a client's remote OAuth MCP support is incomplete, use Claude Desktop, Claude Code, Cursor, Codex CLI, or an OpenClaw community MCP directory/gateway.
-- OpenClaw is highly configurable and works well with community MCP resources or custom MCP configuration. The exact transport support depends on the current OpenClaw runtime.
+- If a client's remote OAuth MCP support is incomplete, use Claude Desktop, Claude Code, Cursor, Codex CLI, or a tested OpenClaw community MCP directory/gateway.
+- OpenClaw is highly configurable, but the exact remote HTTP transport and OAuth support depends on the current OpenClaw runtime.
 
 ## 3. Initial Setup
 
@@ -375,7 +375,7 @@ Key output:
 
 ### dsers_store_push
 
-Pushes import drafts to Shopify or Wix.
+Pushes import drafts to connected Shopify, Wix, or WooCommerce stores when supported by DSers.
 
 Common input:
 
@@ -420,7 +420,7 @@ Protocol:
 2. Show the confirmation response to the user
 3. Call again with `confirm=true` only after explicit approval
 
-This does not delete already published Shopify or Wix listings.
+This does not delete already published storefront listings.
 
 ### dsers_sku_remap
 

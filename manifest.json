@@ -1,0 +1,146 @@
+{
+  "manifest_version": "0.3",
+  "name": "dsers-mcp-product",
+  "display_name": "DSers — Dropshipping Product Import",
+  "version": "1.8.1",
+  "description": "Automate DSers product import from AliExpress, Alibaba, 1688, and Accio to connected stores using AI",
+  "long_description": "An MCP server that lets AI agents automate the DSers dropshipping workflow. Paste a product link from AliExpress, Alibaba, 1688, or Accio.com — your AI agent imports it, applies pricing rules, cleans up the title, and pushes it to a connected Shopify, Wix, or WooCommerce store. Supports bulk import, multi-store push, SEO optimization, and pre-push safety checks.",
+  "author": {
+    "name": "DSers",
+    "url": "https://github.com/dsers"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dsers/dsers-mcp-server.git"
+  },
+  "homepage": "https://github.com/dsers/dsers-mcp-server",
+  "documentation": "https://github.com/dsers/dsers-mcp-server#readme",
+  "support": "https://github.com/dsers/dsers-mcp-server/issues",
+  "license": "MIT",
+  "privacy_policies": [
+    "https://mcp.dsers.com/privacy-policy"
+  ],
+  "keywords": [
+    "dsers",
+    "dropshipping",
+    "shopify",
+    "aliexpress",
+    "alibaba",
+    "1688",
+    "accio",
+    "product-import",
+    "wix",
+    "woocommerce",
+    "ecommerce",
+    "bulk-import"
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.dsers.com/dropshipping/mcp"
+    }
+  ],
+  "compatibility": {
+    "platforms": [
+      "darwin",
+      "win32",
+      "linux"
+    ],
+    "runtimes": {
+      "node": ">=20.0.0"
+    }
+  },
+  "tools": [
+    {
+      "name": "dsers_store_discover",
+      "description": "Retrieve connected stores, shipping methods, pricing rules, and push options"
+    },
+    {
+      "name": "dsers_rules_validate",
+      "description": "Test pricing or title rules before applying — catches mistakes early"
+    },
+    {
+      "name": "dsers_product_import",
+      "description": "Import a product from AliExpress, Alibaba, 1688, or Accio URL with optional pricing rules"
+    },
+    {
+      "name": "dsers_product_preview",
+      "description": "Review an imported product — title, price, variants, stock at a glance"
+    },
+    {
+      "name": "dsers_product_update_rules",
+      "description": "Update pricing, content, images, or variant rules on an already-imported product (incremental merge)"
+    },
+    {
+      "name": "dsers_store_push",
+      "description": "Push products to connected stores — single, bulk, or all stores at once"
+    },
+    {
+      "name": "dsers_product_delete",
+      "description": "Delete a product from the DSers import list (irreversible, requires confirmation)"
+    },
+    {
+      "name": "dsers_find_product",
+      "description": "Search the DSers product pool by keyword or image — results link directly to import"
+    },
+    {
+      "name": "dsers_import_list",
+      "description": "Browse your import staging list with cost, sell price, stock, and markup status"
+    },
+    {
+      "name": "dsers_my_products",
+      "description": "See products already pushed to a store, with supplier links for re-import"
+    },
+    {
+      "name": "dsers_alt_supplier_list",
+      "description": "List primary and alternate suppliers mapped to a DSers product, including supplier URLs and variant detail when requested"
+    },
+    {
+      "name": "dsers_inventory_policy_get",
+      "description": "Read the DSers account inventory sync policy for supplier out-of-stock and delisted-product behavior"
+    },
+    {
+      "name": "dsers_sku_remap",
+      "description": "SKU-level supplier replacement for an already-pushed store product. Strict mode: provide new_supplier_url for an exact swap. Discover mode: omit it and the tool reverse-image-searches the DSers pool and auto-picks the best replacement via multi-factor ranking. Always preview before apply."
+    }
+  ],
+  "prompts": [
+    {
+      "name": "dsers_workflow_quick-import",
+      "description": "Import a single product and push to store as draft",
+      "arguments": [
+        "product_url",
+        "store_name"
+      ],
+      "text": "Import this product and push it to ${arguments.store_name} as a draft:\n${arguments.product_url}\n\nSteps: 1) dsers_store_discover. 2) dsers_product_import. 3) Show preview. 4) dsers_store_push with visibility_mode=backend_only."
+    },
+    {
+      "name": "dsers_workflow_bulk-import",
+      "description": "Batch import multiple products with pricing multiplier",
+      "arguments": [
+        "product_urls",
+        "price_multiplier",
+        "store_name"
+      ],
+      "text": "Bulk import these products with a ${arguments.price_multiplier}x price markup and push to ${arguments.store_name}:\n${arguments.product_urls}\n\nSteps: 1) dsers_store_discover. 2) dsers_product_import with rules. 3) Show previews. 4) dsers_store_push for each."
+    },
+    {
+      "name": "dsers_workflow_multi-push",
+      "description": "Push one product to all connected stores",
+      "arguments": [
+        "product_url"
+      ],
+      "text": "Import this product and push it to ALL my stores:\n${arguments.product_url}\n\nSteps: 1) dsers_store_discover — list all stores. 2) dsers_product_import. 3) dsers_store_push with all stores."
+    },
+    {
+      "name": "dsers_workflow_seo-optimize",
+      "description": "Import, AI-rewrite title & description for SEO, then push",
+      "arguments": [
+        "product_url",
+        "store_name",
+        "target_audience"
+      ],
+      "text": "Import this product and optimize for SEO before pushing to ${arguments.store_name}:\n${arguments.product_url}\nTarget audience: ${arguments.target_audience}\n\nWorkflow: 1) dsers_store_discover. 2) dsers_product_import — get raw preview. 3) Rewrite title and description for SEO. 4) Re-import with rules. 5) Show preview for approval. 6) dsers_store_push."
+    }
+  ]
+}

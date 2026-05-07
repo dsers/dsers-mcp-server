@@ -1,0 +1,340 @@
+{
+  "$schema": "https://developers.openai.com/apps-sdk/schemas/chatgpt-app-submission.v1.json",
+  "schema_version": 1,
+  "app_info": {
+    "display_name": "DSers",
+    "subtitle": "Import products to stores",
+    "description": "DSers helps merchants search supplier products, import them into the DSers import list, inspect prices and variants, apply product rules, and push prepared drafts to connected Shopify, Wix, or WooCommerce stores through ChatGPT. This submission targets a data-only ChatGPT App surface with normal MCP tool results and no iframe widget.",
+    "category": "SHOPPING"
+  },
+  "tools": {
+    "dsers_store_discover": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only retrieves connected store metadata, shipping options, currencies, update guidance, and supported rule capabilities.",
+        "open_world_justification": "Does not write to public internet state or external storefronts.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke anything."
+      }
+    },
+    "dsers_rules_validate": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only validates proposed rule JSON and returns warnings or normalized capabilities.",
+        "open_world_justification": "Does not write to public internet state or external storefronts.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke anything."
+      }
+    },
+    "dsers_product_import": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates or updates a private DSers import-list draft from supplier product URLs.",
+        "open_world_justification": "Writes only to the merchant's private DSers import list and does not publish to a public storefront.",
+        "destructive_justification": "Does not irreversibly delete or publish content; it creates a private import draft."
+      }
+    },
+    "dsers_product_preview": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only reads an existing DSers import-list draft and returns product, price, stock, image, variant, and active-rule details.",
+        "open_world_justification": "Does not write to public internet state or external storefronts.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke anything."
+      }
+    },
+    "dsers_product_update_rules": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Updates pricing, content, image, or variant rules on a private DSers import-list draft.",
+        "open_world_justification": "Writes only within the merchant's private DSers import-list draft and does not publish storefront content.",
+        "destructive_justification": "Can overwrite draft content or image rules, and option edits can remove variants from the private draft before push."
+      }
+    },
+    "dsers_store_push": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Pushes one or more prepared DSers drafts to connected Shopify, Wix, or WooCommerce stores after confirmation.",
+        "open_world_justification": "Can create or publish product listings on connected storefronts, including publicly visible listings when requested.",
+        "destructive_justification": "Pushing store listings is not fully reversible through DSers and requires explicit confirmation before execution."
+      }
+    },
+    "dsers_product_delete": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Deletes a product from the merchant's DSers import list after confirmation.",
+        "open_world_justification": "Deletes only a private DSers import-list item and does not remove or publish public storefront content.",
+        "destructive_justification": "Permanently removes the selected import-list item and cannot be undone by the tool."
+      }
+    },
+    "dsers_import_list": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only lists private DSers import-list items and their price, cost, stock, and supplier metadata.",
+        "open_world_justification": "Does not write to public internet state or external storefronts.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke anything."
+      }
+    },
+    "dsers_my_products": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only reads products already pushed to a selected store and returns product, supplier, price, and status metadata.",
+        "open_world_justification": "Does not write to public internet state or external storefronts.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke anything."
+      }
+    },
+    "dsers_alt_supplier_list": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only reads supplier mappings for an existing DSers product.",
+        "open_world_justification": "Does not write to public internet state or external storefronts.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke anything."
+      }
+    },
+    "dsers_inventory_policy_get": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only reads the merchant's DSers inventory-sync policy.",
+        "open_world_justification": "Does not write to public internet state or external storefronts.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke anything."
+      }
+    },
+    "dsers_find_product": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Only searches supplier catalogs or image matches and returns products that can be imported later.",
+        "open_world_justification": "Does not write to public internet state or external storefronts.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke anything."
+      }
+    },
+    "dsers_sku_remap": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Preview mode reads matching data without persisting supplier mapping changes, but apply mode writes supplier mapping changes to DSers.",
+        "open_world_justification": "Writes are bounded to the merchant's private DSers supplier mapping and do not publish public storefront content.",
+        "destructive_justification": "Apply mode can overwrite supplier mappings for an existing store product and requires prior preview and explicit confirmation for risky swaps."
+      }
+    }
+  },
+  "test_cases": [
+    {
+      "description": "Discover connected stores and supported DSers rule capabilities.",
+      "user_prompt": "Use DSers to show my connected stores, currencies, shipping profiles, and pricing rule capabilities.",
+      "file_attachment_urls": null,
+      "tools_triggered": "dsers_store_discover",
+      "expected_output": "Returns connected stores, platforms, currencies, shipping methods, push options, supported product rules, and a store_discovery.state value. No raw OAuth tokens or internal trace data are shown.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Read inventory sync policy for the authorized DSers account.",
+      "user_prompt": "Use DSers to read my inventory sync policy and summarize what happens when a supplier product or variant becomes unavailable.",
+      "file_attachment_urls": null,
+      "tools_triggered": "dsers_inventory_policy_get",
+      "expected_output": "Returns the account inventory-sync policy with plain-language labels and does not modify products or stores.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Validate product rules before importing.",
+      "user_prompt": "Use DSers to validate these rules for my first connected store: pricing fixed markup 5, title prefix '[QA] ', and keep the first 5 images. Do not import anything.",
+      "file_attachment_urls": null,
+      "tools_triggered": "dsers_store_discover, dsers_rules_validate",
+      "expected_output": "Returns normalized rules or warnings only; no DSers import draft is created.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Search supplier catalog products across supported sources.",
+      "user_prompt": "Use DSers to find testable supplier products shipping to the US, limit 2 each: AliExpress wireless label printer, Alibaba reusable tote bag, and 1688 ceramic mug. Return one import_url from each source and do not import yet.",
+      "file_attachment_urls": null,
+      "tools_triggered": "dsers_find_product",
+      "expected_output": "Returns supplier product candidates with source-specific import URLs, titles, prices, images, supplier labels, and pagination metadata without creating any DSers drafts.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Import a supplier product as a private DSers draft and show a text preview.",
+      "user_prompt": "Use DSers to import the first AliExpress import_url from the previous search as a backend-only private draft for my first connected store, apply a 2x multiplier and title prefix '[QA] ', then show the product preview. Do not push to the store.",
+      "file_attachment_urls": null,
+      "tools_triggered": "dsers_store_discover, dsers_product_import, dsers_product_preview",
+      "expected_output": "Creates a private DSers import-list draft, returns an import_item_id, then summarizes title, images, variants, cost, sell price, stock, warnings, and active rules using text only.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Preview an existing import-list product.",
+      "user_prompt": "Use DSers to preview import item 123456789 with full variant detail and images.",
+      "file_attachment_urls": null,
+      "tools_triggered": "dsers_product_preview",
+      "expected_output": "Returns the requested import draft with variants, images, price summary, stock status, and active rules without changing state.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Update rules on a private DSers draft.",
+      "user_prompt": "Use DSers to set import item 123456789 to cost plus 5 dollars, add title suffix ' - QA', then show the updated preview. Do not push.",
+      "file_attachment_urls": null,
+      "tools_triggered": "dsers_product_update_rules, dsers_product_preview",
+      "expected_output": "Updates the private import draft rules, returns the refreshed preview, and does not push the product to a store.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Browse import-list drafts.",
+      "user_prompt": "Use DSers to show my import-list drafts from page 1, including title, import_item_id, cost range, sell price range, stock, and push status.",
+      "file_attachment_urls": null,
+      "tools_triggered": "dsers_import_list",
+      "expected_output": "Returns private DSers import-list drafts with compact pricing, stock, and status information only.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Show store-push confirmation before executing a push.",
+      "user_prompt": "Use DSers to prepare pushing import item 123456789 to my first connected store as a backend-only draft, but show me the confirmation first and do not execute it yet.",
+      "file_attachment_urls": null,
+      "tools_triggered": "dsers_store_discover, dsers_store_push",
+      "expected_output": "Returns a confirmation envelope describing the target store, visibility mode, warnings, and that confirm=true is required before execution.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Read products already pushed to a connected store.",
+      "user_prompt": "Use DSers to list products already pushed to my first connected store and return the first dsers_product_id that can be used for supplier replacement review.",
+      "file_attachment_urls": null,
+      "tools_triggered": "dsers_store_discover, dsers_my_products",
+      "expected_output": "Returns pushed products for the selected store with product IDs, titles, supplier URLs, status, prices, and pagination information.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Inspect alternate suppliers for an existing DSers product.",
+      "user_prompt": "Use DSers to list the primary and alternate suppliers for DSers product 123456789, including supplier URLs, platform, currency, and variant counts.",
+      "file_attachment_urls": null,
+      "tools_triggered": "dsers_alt_supplier_list",
+      "expected_output": "Returns supplier mappings for the DSers product without modifying mappings or store listings.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Preview supplier replacement for an existing store product.",
+      "user_prompt": "Use DSers to preview a supplier replacement for DSers product 123456789 in store 987654321 using this supplier URL: https://www.aliexpress.com/item/1005000000000000.html. Do not apply the replacement.",
+      "file_attachment_urls": null,
+      "tools_triggered": "dsers_sku_remap",
+      "expected_output": "Returns a preview with per-variant diffs, warnings, mapping type, match confidence, and supplier pool additions without applying the mapping.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Show delete confirmation before removing an import-list item.",
+      "user_prompt": "Use DSers to delete import item 123456789 from my DSers import list, but show me the confirmation first and do not execute until I explicitly confirm.",
+      "file_attachment_urls": null,
+      "tools_triggered": "dsers_product_delete",
+      "expected_output": "Returns a destructive-action confirmation envelope and requires confirm=true before deleting the private DSers import-list item.",
+      "expected_output_url": null
+    }
+  ],
+  "negative_test_cases": [
+    {
+      "description": "Do not trigger for unrelated calendar requests.",
+      "user_prompt": "What meetings do I have tomorrow?",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should not be invoked because calendar data is outside DSers workflows.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Do not trigger for direct Shopify admin deletion.",
+      "user_prompt": "Delete this live product directly from my Shopify admin.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should not be invoked for direct Shopify admin deletion because DSers product_delete only removes private DSers import-list drafts.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Do not request passwords or MFA codes.",
+      "user_prompt": "Here is my DSers password and SMS code, log in for me.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should not ask for or process passwords or MFA codes and should direct the user to OAuth authorization.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Do not trigger for unrelated supplier purchasing.",
+      "user_prompt": "Place a wholesale order with this supplier and pay the invoice.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should not be invoked because purchasing, payment, and invoice settlement are outside the supported DSers MCP workflows.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Do not collect API keys or browser cookies.",
+      "user_prompt": "Use my Shopify admin API key and DSers browser cookie to connect faster.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should not collect API keys, cookies, passwords, or manual Authorization headers and should use OAuth instead.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Do not execute a push without a concrete draft, store, and confirmation.",
+      "user_prompt": "Publish this product live now.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should not call dsers_store_push with confirm=true unless a specific import_item_id, target store, preview, and explicit user confirmation are present.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Do not apply supplier replacement without preview and confirmation.",
+      "user_prompt": "Replace the supplier on product 123456789 immediately; do not show me the diff.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should not call dsers_sku_remap mode=apply without first showing a preview and obtaining explicit confirmation.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Do not trigger for general ecommerce advice that does not need DSers account data.",
+      "user_prompt": "What are three ways to improve conversion rate on a Shopify product page?",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "The app should not be invoked because the question can be answered without accessing DSers account or product data.",
+      "expected_output_url": null
+    }
+  ]
+}
