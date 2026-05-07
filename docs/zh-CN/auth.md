@@ -50,7 +50,7 @@ ChatGPT 会通过 protected-resource metadata 发现 OAuth 配置，并完成 au
 ## 前置条件
 
 - 一个可用的 DSers 账号
-- DSers 已连接至少一个 Shopify、Wix 或 WooCommerce 店铺
+- DSers 已连接至少一个 Shopify 或 Wix 店铺
 - 一个支持远程 HTTP MCP 和 OAuth 2.1 + PKCE 的 MCP 客户端
 
 ## 注意事项

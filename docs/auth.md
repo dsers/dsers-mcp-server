@@ -50,7 +50,7 @@ ChatGPT discovers OAuth through the protected-resource metadata and completes th
 ## Requirements
 
 - A DSers account
-- At least one Shopify, Wix, or WooCommerce store connected in DSers
+- At least one Shopify or Wix store connected in DSers
 - An MCP client with remote HTTP MCP and OAuth 2.1 + PKCE support
 
 ## Important Notes

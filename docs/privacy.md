@@ -39,7 +39,7 @@ The hosted service is designed to be stateless for user workflow data. Product a
 The hosted service communicates with:
 
 - DSers OAuth and API services, to authenticate the user and perform requested DSers actions.
-- Connected store platforms such as Shopify, Wix, or WooCommerce, when the user asks DSers to push a product to a connected store.
+- Connected store platforms such as Shopify or Wix, when the user asks DSers to push a product to a connected store.
 - Supplier and product sources such as AliExpress, Alibaba, Accio, 1688, and related image or product sources when the user asks to search, import, preview, or match products.
 - Upstash Redis, only when analytics environment variables are configured for aggregate operational counters.
 

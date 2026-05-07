@@ -52,7 +52,7 @@ Important write-action classifications:
 
 The review account must be able to complete OAuth without MFA, SMS, email challenge, VPN, allowlisted IP, or manual token copying. It should contain sample DSers data:
 
-- at least one connected Shopify, Wix, or WooCommerce test store
+- at least one connected Shopify or Wix test store
 - import-list draft data or permission to create draft-only test imports
 - at least one pushed product for supplier mapping readback, if SKU remap review is required
 

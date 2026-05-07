@@ -1,10 +1,10 @@
 {
   "manifest_version": "0.3",
-  "name": "dsers-mcp-product",
-  "display_name": "DSers — Dropshipping Product Import",
+  "name": "dsers-mcp-server",
+  "display_name": "DSers Official MCP Server",
   "version": "1.8.1",
-  "description": "Automate DSers product import from AliExpress, Alibaba, 1688, and Accio to connected stores using AI",
-  "long_description": "An MCP server that lets AI agents automate the DSers dropshipping workflow. Paste a product link from AliExpress, Alibaba, 1688, or Accio.com — your AI agent imports it, applies pricing rules, cleans up the title, and pushes it to a connected Shopify, Wix, or WooCommerce store. Supports bulk import, multi-store push, SEO optimization, and pre-push safety checks.",
+  "description": "Official DSers MCP for dropshipping: import, edit, price, and publish products to Shopify and Wix",
+  "long_description": "An MCP server that lets AI agents automate the DSers dropshipping workflow. Paste a product link from AliExpress, Alibaba, 1688, or Accio.com — your AI agent imports it, applies pricing rules, cleans up the title, and pushes it to a connected Shopify or Wix store. Supports bulk import, multi-store push, SEO optimization, and pre-push safety checks.",
   "author": {
     "name": "DSers",
     "url": "https://github.com/dsers"
@@ -30,7 +30,6 @@
     "accio",
     "product-import",
     "wix",
-    "woocommerce",
     "ecommerce",
     "bulk-import"
   ],
@@ -53,7 +52,7 @@
   "tools": [
     {
       "name": "dsers_store_discover",
-      "description": "Retrieve connected stores, shipping methods, pricing rules, and push options"
+      "description": "Retrieve Shopify or Wix stores, shipping methods, pricing rules, and push options"
     },
     {
       "name": "dsers_rules_validate",
@@ -73,7 +72,7 @@
     },
     {
       "name": "dsers_store_push",
-      "description": "Push products to connected stores — single, bulk, or all stores at once"
+      "description": "Push products to Shopify or Wix — single, bulk, or all stores at once"
     },
     {
       "name": "dsers_product_delete",
@@ -126,7 +125,7 @@
     },
     {
       "name": "dsers_workflow_multi-push",
-      "description": "Push one product to all connected stores",
+      "description": "Push one product to all Shopify or Wix stores",
       "arguments": [
         "product_url"
       ],

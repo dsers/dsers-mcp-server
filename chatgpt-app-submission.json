@@ -4,7 +4,7 @@
   "app_info": {
     "display_name": "DSers",
     "subtitle": "Import products to stores",
-    "description": "DSers helps merchants search supplier products, import them into the DSers import list, inspect prices and variants, apply product rules, and push prepared drafts to connected Shopify, Wix, or WooCommerce stores through ChatGPT. This submission targets a data-only ChatGPT App surface with normal MCP tool results and no iframe widget.",
+    "description": "DSers helps merchants search supplier products, import them into the DSers import list, inspect prices and variants, apply product rules, and push prepared drafts to connected Shopify or Wix stores through ChatGPT. This submission targets a data-only ChatGPT App surface with normal MCP tool results and no iframe widget.",
     "category": "SHOPPING"
   },
   "tools": {
@@ -75,7 +75,7 @@
         "destructiveHint": true
       },
       "justifications": {
-        "read_only_justification": "Pushes one or more prepared DSers drafts to connected Shopify, Wix, or WooCommerce stores after confirmation.",
+        "read_only_justification": "Pushes one or more prepared DSers drafts to connected Shopify or Wix stores after confirmation.",
         "open_world_justification": "Can create or publish product listings on connected storefronts, including publicly visible listings when requested.",
         "destructive_justification": "Pushing store listings is not fully reversible through DSers and requires explicit confirmation before execution."
       }

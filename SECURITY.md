@@ -30,9 +30,17 @@ See [Privacy and Security](docs/privacy.md) and the hosted policy at:
 https://mcp.dsers.com/privacy-policy
 ```
 
+## Support and Issues
+
+For non-sensitive documentation, connection, client compatibility, or usage questions, open a public GitHub issue:
+
+```text
+https://github.com/dsers/dsers-mcp-server/issues
+```
+
 ## Reporting Security Issues
 
-Do not open a public GitHub issue for vulnerabilities, secrets, tokens, or account-specific data. Contact:
+For vulnerabilities, secrets, tokens, or account-specific data, use private email instead of a public issue. Send security-sensitive reports to:
 
 ```text
 zhaohaoduo@dsers.com

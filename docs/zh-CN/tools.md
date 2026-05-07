@@ -201,7 +201,7 @@ DSers Official MCP Server 提供面向 dropshipping 工作流的 AI 工具。
 
 ### `dsers_store_push`
 
-把 import draft 推送到 DSers 支持的已连接 Shopify、Wix 或 WooCommerce 店铺。
+把 import draft 推送到 Shopify/Wix。
 
 常用参数：
 

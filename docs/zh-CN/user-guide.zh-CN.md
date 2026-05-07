@@ -8,13 +8,13 @@ DSers MCP 是一个托管版 Model Context Protocol 服务，地址：
 https://mcp.dsers.com/dropshipping/mcp
 ```
 
-它把 DSers 的选品、导入、定价、改标题/描述、推送到已连接店铺、供应商替换等能力暴露给支持 MCP + OAuth 的客户端。
+它把 DSers 的选品、导入、定价、改标题/描述、推送到 Shopify/Wix、供应商替换等能力暴露给支持 MCP + OAuth 的客户端。
 
 适用场景：
 
 - 从 AliExpress / Alibaba / 1688 / Accio 导入商品到 DSers import list
 - 给商品批量套定价、标题、描述、图片、变体规则
-- 预览 DSers draft，再推送到已连接店铺
+- 预览 DSers draft，再推送到 Shopify/Wix
 - 搜索 DSers 商品池
 - 浏览 import list 和已推送商品
 - 对已上架商品做 SKU 级供应商替换
@@ -24,7 +24,7 @@ https://mcp.dsers.com/dropshipping/mcp
 使用者需要：
 
 - 一个可用的 DSers 账号
-- DSers 已连接至少一个 Shopify、Wix 或 WooCommerce 店铺
+- DSers 已连接至少一个 Shopify / Wix 店铺
 - 一个支持远程 HTTP MCP 和 OAuth 2.1 + PKCE 的 MCP 客户端
 
 已验证或预期可用的客户端：
@@ -36,14 +36,14 @@ https://mcp.dsers.com/dropshipping/mcp
 | Claude Code | 可用 | `claude mcp add` |
 | Codex CLI | 可用 | `codex mcp login` |
 | VS Code / Cline / Windsurf / Zed / Continue | 预期可用 | 需要支持 OAuth MCP |
-| OpenClaw | 视环境而定 | 部分部署可通过 OpenClaw MCP registry 或 AgentHotspot / ClawHub 等社区 MCP 目录接入；remote OAuth 支持以当前运行环境为准 |
+| OpenClaw | 可用 | 可通过 OpenClaw MCP registry 或 AgentHotspot / ClawHub 等社区 MCP 目录接入 |
 
 客户端选择原则：
 
 - 这个 MCP 是远程 HTTP 服务，不提供本地 stdio server。
 - 客户端必须支持 remote MCP 的 OAuth 2.1 + PKCE 授权流程。
-- 如果某个客户端的 remote OAuth MCP 支持不完整，优先换 Claude Desktop、Claude Code、Cursor、Codex CLI，或使用已验证的 OpenClaw 社区 MCP 目录/网关。
-- OpenClaw 的自由度较高，但 remote HTTP transport 和 OAuth 能力以当前 OpenClaw 运行环境为准。
+- 如果某个客户端的 remote OAuth MCP 支持不完整，优先换 Claude Desktop、Claude Code、Cursor、Codex CLI，或通过 OpenClaw 社区 MCP 目录/网关接入。
+- OpenClaw 的自由度较高，适合使用社区 MCP 资源或自定义 MCP 配置；实际可用 transport 以当前 OpenClaw 运行环境为准。
 
 ## 3. 初始化安装
 
@@ -375,7 +375,7 @@ DSers MCP 使用 OAuth 2.1 + PKCE。不要手动配置 API key，也不要手动
 
 ### dsers_store_push
 
-把 import draft 推送到 DSers 支持的已连接 Shopify、Wix 或 WooCommerce 店铺。
+把 import draft 推送到 Shopify/Wix。
 
 常用参数：
 

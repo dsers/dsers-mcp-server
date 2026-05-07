@@ -201,7 +201,7 @@ Key output:
 
 ### `dsers_store_push`
 
-Pushes import drafts to connected Shopify, Wix, or WooCommerce stores when supported by DSers.
+Pushes import drafts to Shopify or Wix.
 
 Common input:
 

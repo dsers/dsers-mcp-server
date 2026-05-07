@@ -67,10 +67,8 @@ https://mcp.dsers.com/dropshipping/mcp
 
 ## OpenClaw
 
-OpenClaw 支持情况取决于具体部署。如果当前运行环境支持远程 HTTP MCP 和 OAuth，请通过它的 MCP registry 或社区网关流程添加：
-
-```text
-https://mcp.dsers.com/dropshipping/mcp
+```bash
+openclaw mcp set dsers '{"url":"https://mcp.dsers.com/dropshipping/mcp","transport":"streamable-http"}'
 ```
 
 ## 推荐调用流程

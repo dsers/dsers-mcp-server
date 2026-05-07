@@ -19,7 +19,7 @@ Use a dedicated test store. Prefix all test-created titles with `[RUN_ID]`.
 - `GET /health` returns the expected version.
 - Unauthenticated MCP requests advertise OAuth discovery metadata.
 - The DSers test account can sign in without MFA, SMS, email challenge, VPN, or internal allowlist.
-- The test account has at least one connected Shopify, Wix, or WooCommerce store in DSers.
+- The test account has at least one connected Shopify or Wix store in DSers.
 - The current ChatGPT surface is data-only: no widget resource and no `dsers_app_render` tool should appear.
 
 Quick checks:

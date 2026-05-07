@@ -35,18 +35,18 @@ DSers MCP 使用 OAuth 2.1 + PKCE。
 使用者需要：
 
 - 一个可用的 DSers 账号
-- DSers 已连接至少一个 Shopify、Wix 或 WooCommerce 店铺
+- DSers 已连接至少一个 Shopify 或 Wix 店铺
 - 一个支持远程 HTTP MCP 和 OAuth 2.1 + PKCE 的 MCP 客户端
 
-已验证客户端（端到端测试通过）：ChatGPT Developer Mode、Claude Desktop、Cursor、Claude Code、Codex CLI。
+已验证客户端（端到端测试通过）：ChatGPT Developer Mode、Claude Desktop、Cursor、Claude Code、Codex CLI、OpenClaw。
 
-预期可用（具备远程 HTTP + OAuth 2.1 + PKCE 支持的 MCP 客户端）：VS Code、Cline、Windsurf、Zed、Continue。OpenClaw 支持情况取决于具体部署，部分用户可通过 registry 或社区网关接入。
+预期可用（具备远程 HTTP + OAuth 2.1 + PKCE 支持的 MCP 客户端）：VS Code、Cline、Windsurf、Zed、Continue。
 
 ## 可实现能力
 
 - 从 AliExpress、Alibaba、1688、Accio 或支持的供应商来源导入商品
 - 给商品应用定价、标题、描述、图片、变体规则
-- 预览 DSers draft，再推送到已连接店铺
+- 预览 DSers draft，再推送到 Shopify 或 Wix
 - 搜索 DSers 商品池
 - 浏览 DSers import list 和已推送商品
 - 对已上架商品做 SKU 级供应商替换
@@ -119,7 +119,11 @@ https://mcp.dsers.com/dropshipping/mcp
 
 ### OpenClaw
 
-部分 OpenClaw 部署可通过 MCP registry 或社区网关连接。transport 和授权支持因运行环境而异，请以当前连接向导为准，并优先使用 OAuth 流程，不要使用 API key 或 cookie 绕过。
+```bash
+openclaw mcp set dsers '{"url":"https://mcp.dsers.com/dropshipping/mcp","transport":"streamable-http"}'
+```
+
+不同 OpenClaw 部署形态支持的 transport 和授权入口可能不同，请以当前环境的连接向导为准。
 
 ## 文档
 

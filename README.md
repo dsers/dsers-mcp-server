@@ -35,18 +35,18 @@ For details, see [Authentication](docs/auth.md).
 You need:
 
 - A DSers account
-- At least one Shopify, Wix, or WooCommerce store connected in DSers
+- At least one Shopify or Wix store connected in DSers
 - An MCP client that supports remote HTTP MCP and OAuth 2.1 + PKCE
 
-Verified clients (tested end to end): ChatGPT Developer Mode, Claude Desktop, Cursor, Claude Code, Codex CLI.
+Verified clients (tested end to end): ChatGPT Developer Mode, Claude Desktop, Cursor, Claude Code, Codex CLI, OpenClaw.
 
-Expected to work (any MCP client with remote HTTP + OAuth 2.1 + PKCE support): VS Code, Cline, Windsurf, Zed, Continue. OpenClaw support varies by deployment; some users connect through an OpenClaw registry or community gateway.
+Expected to work (any MCP client with remote HTTP + OAuth 2.1 + PKCE support): VS Code, Cline, Windsurf, Zed, Continue.
 
 ## What You Can Do
 
 - Import products from AliExpress, Alibaba, 1688, Accio, or supported supplier sources
 - Apply pricing, title, description, image, and variant rules
-- Preview DSers drafts before pushing to connected stores
+- Preview DSers drafts before pushing to Shopify or Wix
 - Search the DSers product pool
 - Browse DSers import-list drafts and already pushed products
 - Replace suppliers on existing store products with SKU-level matching
@@ -119,7 +119,11 @@ The current ChatGPT submission target is data-only: DSers exposes normal MCP too
 
 ### OpenClaw
 
-Some OpenClaw deployments can connect through an MCP registry or community gateway. Transport and authorization support varies; follow the connection guide for your current environment and prefer the OAuth flow over any API-key or cookie workaround.
+```bash
+openclaw mcp set dsers '{"url":"https://mcp.dsers.com/dropshipping/mcp","transport":"streamable-http"}'
+```
+
+Transport and authorization support may vary by OpenClaw deployment. Follow the connection guide for your current environment.
 
 ## Documentation
 
