@@ -2,6 +2,8 @@
 
 DSers 官方 MCP Server，用于 AI 驱动的 dropshipping 自动化。
 
+本服务为 DSers 官方 MCP Server，已在官方 MCP Registry 登记为 `io.github.dsers/dsers-mcp-server`。
+
 DSers Official MCP Server 是一个托管版远程 Model Context Protocol 服务，可让支持 MCP 的 AI 客户端和 ChatGPT Apps 调用 DSers 的选品、导入、商品优化、变体编辑、定价规则、店铺推送、供应商替换等工作流。
 
 本仓库**不包含 DSers MCP Server 后端源码**。本仓库只提供官方公开文档、连接信息、配置示例和 registry metadata，用于发布和接入 DSers 托管的远程 MCP 服务。

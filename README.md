@@ -2,6 +2,8 @@
 
 Official DSers MCP Server for AI-powered dropshipping automation.
 
+This is the official DSers MCP Server, listed on the Official MCP Registry as `io.github.dsers/dsers-mcp-server`.
+
 The DSers Official MCP Server is a hosted remote Model Context Protocol server that allows MCP-compatible AI clients and ChatGPT Apps to work with DSers dropshipping workflows, including product search, product import, product optimization, variant editing, pricing rules, store publishing, and supplier replacement.
 
 This repository does **not** contain the DSers MCP server backend source code. It provides official public documentation, connection information, examples, and registry metadata for the DSers-hosted remote MCP server.
