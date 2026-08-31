@@ -5,7 +5,7 @@ Use this playbook before submitting or resubmitting DSers as a ChatGPT App.
 ## Inputs
 
 ```text
-CHATGPT_MCP_URL=https://mcp.dsers.com/dropshipping/mcp
+CHATGPT_MCP_URL=https://ai.dsers.com/mcp
 DSERS_TEST_ACCOUNT=<demo account with no MFA / SMS / email challenge>
 PRIMARY_TEST_STORE=<store name or id from dsers_store_discover>
 RUN_ID=CGPT-YYYYMMDD-HHMM
@@ -27,13 +27,13 @@ Quick checks:
 
 ```bash
 curl -s https://mcp.dsers.com/health
-curl -i https://mcp.dsers.com/dropshipping/mcp
+curl -i https://ai.dsers.com/mcp
 ```
 
 ## Developer Mode Setup
 
 1. Open ChatGPT Developer Mode or the Apps dashboard.
-2. Add the DSers MCP endpoint: `https://mcp.dsers.com/dropshipping/mcp`.
+2. Add the DSers MCP endpoint: `https://ai.dsers.com/mcp`.
 3. Start a new chat and run:
 
 ```text

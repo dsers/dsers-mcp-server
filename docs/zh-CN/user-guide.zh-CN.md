@@ -5,7 +5,7 @@
 DSers MCP 是一个托管版 Model Context Protocol 服务，地址：
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 它把 DSers 的选品、导入、定价、改标题/描述、推送到 Shopify/Wix、供应商替换等能力暴露给支持 MCP + OAuth 的客户端。
@@ -56,7 +56,7 @@ https://mcp.dsers.com/dropshipping/mcp
   "mcpServers": {
     "dsers": {
       "type": "http",
-      "url": "https://mcp.dsers.com/dropshipping/mcp"
+      "url": "https://ai.dsers.com/mcp"
     }
   }
 }
@@ -67,7 +67,7 @@ https://mcp.dsers.com/dropshipping/mcp
 ### 3.2 Claude Code
 
 ```bash
-claude mcp add dsers https://mcp.dsers.com/dropshipping/mcp --transport http
+claude mcp add dsers https://ai.dsers.com/mcp --transport http
 ```
 
 然后触发登录：
@@ -87,7 +87,7 @@ Settings → Tools & Integrations → MCP Tools → Add / Connect
 填入：
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 Cursor 会自动走 OAuth 授权流程。
@@ -103,7 +103,7 @@ codex mcp login dsers
 如果客户端要求 URL，使用：
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 ### 3.5 OpenClaw
@@ -111,7 +111,7 @@ https://mcp.dsers.com/dropshipping/mcp
 OpenClaw 可以通过 MCP registry 保存远程 MCP server 配置。自托管或 CLI 场景可参考：
 
 ```bash
-openclaw mcp set dsers '{"url":"https://mcp.dsers.com/dropshipping/mcp","transport":"streamable-http"}'
+openclaw mcp set dsers '{"url":"https://ai.dsers.com/mcp","transport":"streamable-http"}'
 ```
 
 也可以通过当前可用的社区 MCP 目录添加 DSers MCP。这些目录不是 DSers 运营的服务，请以对应目录的当前连接说明为准，并优先使用上方 DSers 官方 MCP endpoint。

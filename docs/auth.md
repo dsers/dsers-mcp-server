@@ -9,7 +9,7 @@ Do **not** paste DSers backend API keys, store tokens, or browser cookies into a
 ## Remote Endpoint
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 ## Authentication Flow
@@ -32,7 +32,7 @@ The hosted server publishes the OAuth metadata required by remote MCP clients:
 The server supports Dynamic Client Registration, authorization-code flow with PKCE `S256`, refresh-token grant, and RFC 8707 resource binding for:
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 MCP clients should let the OAuth flow run normally. Do not copy tokens between clients; each client manages its own OAuth session.
@@ -42,7 +42,7 @@ MCP clients should let the OAuth flow run normally. Do not copy tokens between c
 For ChatGPT Apps, use the same MCP endpoint:
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 ChatGPT discovers OAuth through the protected-resource metadata and completes the authorization-code + PKCE flow. The current public submission target is data-only and does not require a widget iframe.

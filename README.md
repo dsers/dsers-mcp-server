@@ -11,7 +11,7 @@ This repository does **not** contain the DSers MCP server backend source code. I
 ## Remote MCP Endpoint
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 ## Transport
@@ -64,7 +64,7 @@ Add this to `claude_desktop_config.json`:
   "mcpServers": {
     "dsers": {
       "type": "http",
-      "url": "https://mcp.dsers.com/dropshipping/mcp"
+      "url": "https://ai.dsers.com/mcp"
     }
   }
 }
@@ -75,7 +75,7 @@ Restart Claude Desktop. On first tool use, the client starts OAuth and opens the
 ### Claude Code
 
 ```bash
-claude mcp add dsers https://mcp.dsers.com/dropshipping/mcp --transport http
+claude mcp add dsers https://ai.dsers.com/mcp --transport http
 claude mcp login dsers
 ```
 
@@ -90,7 +90,7 @@ Settings → Tools & Integrations → MCP Tools → Add / Connect
 Use this server URL:
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 Cursor should start the OAuth flow automatically.
@@ -106,7 +106,7 @@ codex mcp login dsers
 If the client asks for the server URL, use:
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 ### ChatGPT App
@@ -114,7 +114,7 @@ https://mcp.dsers.com/dropshipping/mcp
 Use the remote endpoint in ChatGPT Developer Mode or the Apps dashboard:
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 The current ChatGPT submission target is data-only: DSers exposes normal MCP tools and does not require an iframe widget. See [ChatGPT App submission notes](docs/chatgpt-app-submission.md).
@@ -122,7 +122,7 @@ The current ChatGPT submission target is data-only: DSers exposes normal MCP too
 ### OpenClaw
 
 ```bash
-openclaw mcp set dsers '{"url":"https://mcp.dsers.com/dropshipping/mcp","transport":"streamable-http"}'
+openclaw mcp set dsers '{"url":"https://ai.dsers.com/mcp","transport":"streamable-http"}'
 ```
 
 Transport and authorization support may vary by OpenClaw deployment. Follow the connection guide for your current environment.
@@ -145,7 +145,7 @@ Transport and authorization support may vary by OpenClaw deployment. Follow the 
   "mcpServers": {
     "dsers": {
       "type": "http",
-      "url": "https://mcp.dsers.com/dropshipping/mcp"
+      "url": "https://ai.dsers.com/mcp"
     }
   }
 }

@@ -9,7 +9,7 @@ DSers MCP 使用 OAuth 2.1 + PKCE。
 ## Remote Endpoint
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 ## 认证流程
@@ -32,7 +32,7 @@ https://mcp.dsers.com/dropshipping/mcp
 服务支持 Dynamic Client Registration、带 PKCE `S256` 的 authorization-code flow、refresh-token grant，以及针对以下 resource 的 RFC 8707 resource binding：
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 MCP 客户端应该正常走 OAuth 流程，不要在不同客户端之间手动复制 token；每个客户端都有自己的 OAuth session。
@@ -42,7 +42,7 @@ MCP 客户端应该正常走 OAuth 流程，不要在不同客户端之间手动
 ChatGPT Apps 使用同一个 MCP endpoint：
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 ChatGPT 会通过 protected-resource metadata 发现 OAuth 配置，并完成 authorization-code + PKCE 流程。当前公开提交目标是 data-only，不需要 widget iframe。

@@ -3,7 +3,7 @@
 DSers MCP is a hosted remote MCP server operated by DSers at:
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 This public repository contains documentation and metadata only. It does not contain backend source code, production secrets, OAuth tokens, browser cookies, private API keys, or user data.
