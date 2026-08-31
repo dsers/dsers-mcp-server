@@ -26,7 +26,7 @@ https://ai.dsers.com/mcp
 - `GET https://ai.dsers.com/.well-known/oauth-protected-resource`
 - `GET https://ai.dsers.com/.well-known/oauth-authorization-server`
 - `POST https://ai.dsers.com/oauth/register`
-- `GET https://ai.dsers.com/oauth/authorize`
+- `GET https://accounts.dsers.com/accounts/mcp_oauth_v2`（授权页，即 metadata 中声明的 `authorization_endpoint`）
 - `POST https://ai.dsers.com/oauth/token`
 
 服务支持 Dynamic Client Registration、带 PKCE `S256` 的 authorization-code flow、refresh-token grant，以及针对以下 resource 的 RFC 8707 resource binding：

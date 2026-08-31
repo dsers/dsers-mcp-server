@@ -26,7 +26,7 @@ The hosted server publishes the OAuth metadata required by remote MCP clients:
 - `GET https://ai.dsers.com/.well-known/oauth-protected-resource`
 - `GET https://ai.dsers.com/.well-known/oauth-authorization-server`
 - `POST https://ai.dsers.com/oauth/register`
-- `GET https://ai.dsers.com/oauth/authorize`
+- `GET https://accounts.dsers.com/accounts/mcp_oauth_v2` (authorization page, as declared by `authorization_endpoint` in the metadata)
 - `POST https://ai.dsers.com/oauth/token`
 
 The server supports Dynamic Client Registration, authorization-code flow with PKCE `S256`, refresh-token grant, and RFC 8707 resource binding for:
