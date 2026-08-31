@@ -23,11 +23,11 @@ https://ai.dsers.com/mcp
 
 托管服务会发布远程 MCP 客户端需要的 OAuth metadata：
 
-- `GET https://mcp.dsers.com/.well-known/oauth-protected-resource`
-- `GET https://mcp.dsers.com/.well-known/oauth-authorization-server`
-- `POST https://mcp.dsers.com/oauth/register`
-- `GET https://mcp.dsers.com/oauth/authorize`
-- `POST https://mcp.dsers.com/oauth/token`
+- `GET https://ai.dsers.com/.well-known/oauth-protected-resource`
+- `GET https://ai.dsers.com/.well-known/oauth-authorization-server`
+- `POST https://ai.dsers.com/oauth/register`
+- `GET https://ai.dsers.com/oauth/authorize`
+- `POST https://ai.dsers.com/oauth/token`
 
 服务支持 Dynamic Client Registration、带 PKCE `S256` 的 authorization-code flow、refresh-token grant，以及针对以下 resource 的 RFC 8707 resource binding：
 
