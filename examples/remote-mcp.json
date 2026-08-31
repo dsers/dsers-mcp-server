@@ -2,7 +2,7 @@
   "mcpServers": {
     "dsers": {
       "type": "http",
-      "url": "https://mcp.dsers.com/dropshipping/mcp"
+      "url": "https://ai.dsers.com/mcp"
     }
   }
 }

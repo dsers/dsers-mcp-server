@@ -11,7 +11,7 @@ DSers Official MCP Server 是一个托管版远程 Model Context Protocol 服务
 ## Remote MCP Endpoint
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 ## Transport
@@ -64,7 +64,7 @@ DSers MCP 使用 OAuth 2.1 + PKCE。
   "mcpServers": {
     "dsers": {
       "type": "http",
-      "url": "https://mcp.dsers.com/dropshipping/mcp"
+      "url": "https://ai.dsers.com/mcp"
     }
   }
 }
@@ -75,7 +75,7 @@ DSers MCP 使用 OAuth 2.1 + PKCE。
 ### Claude Code
 
 ```bash
-claude mcp add dsers https://mcp.dsers.com/dropshipping/mcp --transport http
+claude mcp add dsers https://ai.dsers.com/mcp --transport http
 claude mcp login dsers
 ```
 
@@ -90,7 +90,7 @@ Settings → Tools & Integrations → MCP Tools → Add / Connect
 填入：
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 Cursor 会自动走 OAuth 授权流程。
@@ -106,7 +106,7 @@ codex mcp login dsers
 如果客户端要求填写 URL，使用：
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 ### ChatGPT App
@@ -114,7 +114,7 @@ https://mcp.dsers.com/dropshipping/mcp
 在 ChatGPT Developer Mode 或 Apps dashboard 中使用远程 endpoint：
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 当前 ChatGPT 提交目标是 data-only：DSers 只暴露普通 MCP tools，不依赖 iframe widget。见 [ChatGPT App 提交说明](docs/chatgpt-app-submission.md)。
@@ -122,7 +122,7 @@ https://mcp.dsers.com/dropshipping/mcp
 ### OpenClaw
 
 ```bash
-openclaw mcp set dsers '{"url":"https://mcp.dsers.com/dropshipping/mcp","transport":"streamable-http"}'
+openclaw mcp set dsers '{"url":"https://ai.dsers.com/mcp","transport":"streamable-http"}'
 ```
 
 不同 OpenClaw 部署形态支持的 transport 和授权入口可能不同，请以当前环境的连接向导为准。
@@ -145,7 +145,7 @@ openclaw mcp set dsers '{"url":"https://mcp.dsers.com/dropshipping/mcp","transpo
   "mcpServers": {
     "dsers": {
       "type": "http",
-      "url": "https://mcp.dsers.com/dropshipping/mcp"
+      "url": "https://ai.dsers.com/mcp"
     }
   }
 }

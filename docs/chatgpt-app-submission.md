@@ -5,7 +5,7 @@ This repository contains the public metadata package for submitting the DSers ho
 ## Submission Shape
 
 - App type: data-only ChatGPT App
-- MCP endpoint: `https://mcp.dsers.com/dropshipping/mcp`
+- MCP endpoint: `https://ai.dsers.com/mcp`
 - Transport: Streamable HTTP
 - Authentication: OAuth 2.1 + PKCE through DSers
 - Widget / iframe: not required for the current submission

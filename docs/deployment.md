@@ -5,7 +5,7 @@ This public repository documents the DSers-hosted remote MCP server. It does not
 ## Production Endpoint
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 The production endpoint is operated by DSers. Users and reviewers should use this URL for ChatGPT App review, MCP registry metadata, and MCP-compatible clients.

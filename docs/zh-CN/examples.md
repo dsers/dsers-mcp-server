@@ -7,7 +7,7 @@
   "mcpServers": {
     "dsers": {
       "type": "http",
-      "url": "https://mcp.dsers.com/dropshipping/mcp"
+      "url": "https://ai.dsers.com/mcp"
     }
   }
 }
@@ -22,7 +22,7 @@
   "mcpServers": {
     "dsers": {
       "type": "http",
-      "url": "https://mcp.dsers.com/dropshipping/mcp"
+      "url": "https://ai.dsers.com/mcp"
     }
   }
 }
@@ -33,7 +33,7 @@
 ## Claude Code
 
 ```bash
-claude mcp add dsers https://mcp.dsers.com/dropshipping/mcp --transport http
+claude mcp add dsers https://ai.dsers.com/mcp --transport http
 claude mcp login dsers
 ```
 
@@ -48,7 +48,7 @@ Settings → Tools & Integrations → MCP Tools → Add / Connect
 填入：
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 ## Codex CLI
@@ -62,13 +62,13 @@ codex mcp login dsers
 如果客户端要求填写 URL，使用：
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 ## OpenClaw
 
 ```bash
-openclaw mcp set dsers '{"url":"https://mcp.dsers.com/dropshipping/mcp","transport":"streamable-http"}'
+openclaw mcp set dsers '{"url":"https://ai.dsers.com/mcp","transport":"streamable-http"}'
 ```
 
 ## 推荐调用流程

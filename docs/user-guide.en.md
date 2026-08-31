@@ -5,7 +5,7 @@
 DSers MCP is a hosted Model Context Protocol server:
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 It exposes DSers dropshipping workflows to MCP clients that support remote HTTP transport and OAuth 2.1 + PKCE.
@@ -56,7 +56,7 @@ Add this to `claude_desktop_config.json`:
   "mcpServers": {
     "dsers": {
       "type": "http",
-      "url": "https://mcp.dsers.com/dropshipping/mcp"
+      "url": "https://ai.dsers.com/mcp"
     }
   }
 }
@@ -67,7 +67,7 @@ Restart Claude Desktop. On first tool use, the client starts OAuth and opens the
 ### 3.2 Claude Code
 
 ```bash
-claude mcp add dsers https://mcp.dsers.com/dropshipping/mcp --transport http
+claude mcp add dsers https://ai.dsers.com/mcp --transport http
 ```
 
 Then authenticate:
@@ -87,7 +87,7 @@ Settings → Tools & Integrations → MCP Tools → Add / Connect
 Use this server URL:
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 Cursor should start the OAuth flow automatically.
@@ -103,7 +103,7 @@ codex mcp login dsers
 If the client asks for the server URL, use:
 
 ```text
-https://mcp.dsers.com/dropshipping/mcp
+https://ai.dsers.com/mcp
 ```
 
 ### 3.5 OpenClaw
@@ -111,7 +111,7 @@ https://mcp.dsers.com/dropshipping/mcp
 OpenClaw can save remote MCP server definitions through its MCP registry. For self-hosted or CLI setups:
 
 ```bash
-openclaw mcp set dsers '{"url":"https://mcp.dsers.com/dropshipping/mcp","transport":"streamable-http"}'
+openclaw mcp set dsers '{"url":"https://ai.dsers.com/mcp","transport":"streamable-http"}'
 ```
 
 You can also add DSers MCP through community MCP directories where available. Those directories are not operated by DSers; follow their current connection guide and prefer the official DSers MCP endpoint shown above.
