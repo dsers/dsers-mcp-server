@@ -10,7 +10,7 @@
   "tools": {
     "dsers_store_discover": {
       "annotations": {
-        "readOnlyHint": true,
+        "readOnlyHint": false,
         "openWorldHint": false,
         "destructiveHint": false
       },
@@ -22,7 +22,7 @@
     },
     "dsers_rules_validate": {
       "annotations": {
-        "readOnlyHint": true,
+        "readOnlyHint": false,
         "openWorldHint": false,
         "destructiveHint": false
       },
@@ -46,7 +46,7 @@
     },
     "dsers_product_preview": {
       "annotations": {
-        "readOnlyHint": true,
+        "readOnlyHint": false,
         "openWorldHint": false,
         "destructiveHint": false
       },
@@ -60,7 +60,7 @@
       "annotations": {
         "readOnlyHint": false,
         "openWorldHint": false,
-        "destructiveHint": true
+        "destructiveHint": false
       },
       "justifications": {
         "read_only_justification": "Updates pricing, content, image, or variant rules on a private DSers import-list draft.",
@@ -94,7 +94,7 @@
     },
     "dsers_import_list": {
       "annotations": {
-        "readOnlyHint": true,
+        "readOnlyHint": false,
         "openWorldHint": false,
         "destructiveHint": false
       },
