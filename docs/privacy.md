@@ -1,62 +1,48 @@
 # Privacy and Security
 
-The DSers Official MCP Server is hosted by DSers. This public repository provides documentation, connection examples, and registry metadata. It does not contain backend source code, user credentials, access tokens, browser cookies, private API keys, or user data.
+The DSers Official MCP Server is hosted by DSers. This public repository contains documentation and metadata only; it does not contain production credentials or customer data.
 
-Hosted privacy policy URL:
+Hosted privacy policy:
 
 ```text
 https://mcp.dsers.com/privacy-policy
 ```
 
-## Data Processed by the Hosted Service
+## Data processed
 
-Depending on the user's authorization and DSers account permissions, the MCP server may process:
+Depending on the authorized account, selected tool, and supplied arguments, the service may process:
 
-- OAuth authorization data: DSers OAuth tokens received through the authorization flow and wrapped into encrypted MCP access and refresh tokens.
-- DSers account and store data: store IDs, store names, platform type, currencies, shipping settings, pricing-rule capabilities, and related account metadata.
-- Product and supplier data: product titles, images, prices, variants, SKU mappings, stock status, supplier URLs, import item IDs, DSers product IDs, push status, and rule settings.
-- Operational metadata: request and tool names, success or failure status, coarse client type, coarse country code when provided by the hosting platform, timestamps, correlation identifiers, instance identifiers, and DSers user identifiers used for diagnostics, abuse prevention, and aggregate usage reporting.
+- OAuth identity, roles, scopes, DSers user identifiers, and a short-lived request credential needed to call DSers services.
+- Account, plan, AI Credit, billing, invoice, store, application, and platform-setting data.
+- Supplier products, pre-publish products, managed store products, variants, images, prices, inventory, Mapping, and Publishing data.
+- Orders, addresses, billing records, supplier orders, shipping methods, packages, tracking numbers, and notification state.
+- Operational data such as tool name, status, latency, request identifiers, rate-limit state, quota usage, and audit metadata.
 
-The service should not request DSers passwords, MFA codes, API keys, browser cookies, payment card data, government identifiers, or health information through MCP tool inputs.
+## Storage and logging
 
-## User Authorization
+The MCP BFF is stateless for protocol sessions, but some operational and workflow data is persisted where the current service requires it:
 
-DSers MCP uses OAuth 2.1 + PKCE. Users must authorize access through DSers before MCP clients can call tools.
+- tool audit records may be stored in DSers MySQL infrastructure;
+- asynchronous task state may be stored so owner-scoped jobs can be polled;
+- Redis may be used for quotas, rate limits, locks, and short-lived caches;
+- logs, metrics, and traces may contain minimized operational metadata.
 
-MCP clients should not ask users to paste DSers backend API keys, store tokens, browser cookies, or passwords. If authorization fails, reconnect the MCP server or re-run the OAuth login flow.
+Generic audit serialization redacts tokens, secrets, street lines, contacts, phone numbers, email addresses, tax data, company data, and passport fields. Address-related tools use summary-level audit policy.
 
-## Storage and Retention
+Retention periods are governed by the deployed DSers services and operational policy. This repository does not promise fixed token, audit, analytics, cache, or task-retention periods.
 
-The hosted service is designed to be stateless for user workflow data. Product and store data is processed during requests and is not stored in a product database operated by this MCP service.
+## Connected services
 
-- Authorization codes expire after 10 minutes.
-- Wrapper access tokens are short lived and capped by the underlying DSers OAuth token lifetime and server maximum lifetime.
-- Wrapper refresh tokens can last up to 30 days so compatible MCP clients can refresh sessions.
-- Optional aggregate daily analytics keys expire after 90 days, hourly analytics keys expire after 14 days, and total counters may be retained until deleted by the operator.
+The MCP service communicates with DSers account, plan, product, settings, order, tracking, and related services. A user-requested operation may also affect a connected sales channel or supplier application, for example Shopify publishing, fulfillment, or buyer tracking notification.
 
-## Third Parties
+## Safety
 
-The hosted service communicates with:
-
-- DSers OAuth and API services, to authenticate the user and perform requested DSers actions.
-- Connected store platforms such as Shopify or Wix, when the user asks DSers to push a product to a connected store.
-- Supplier and product sources such as AliExpress, Alibaba, Accio, 1688, and related image or product sources when the user asks to search, import, preview, or match products.
-- Upstash Redis, only when analytics environment variables are configured for aggregate operational counters.
-
-The service does not sell personal data and does not use advertising networks.
-
-## Safety Rules
-
-Recommended safety behavior:
-
-- Use `backend_only` as the default `visibility_mode` for pushes.
-- Do not use `sell_immediately` unless price, inventory, store, and variants have been checked.
-- Do not use `force_push=true` unless the exact risk has been shown to the user and explicit confirmation has been received.
-- Do not skip `dsers_sku_remap mode=preview` before applying supplier replacement.
-- Deletion from the import list requires a second confirmation.
+- Use OAuth; never submit passwords, MFA codes, API keys, cookies, or manually copied tokens.
+- Read current state and use exact DSers identifiers before any mutation.
+- Obtain explicit user confirmation immediately before a dangerous tool call.
+- Do not automatically retry a write reported as `UPSTREAM_UNKNOWN`.
+- Re-read versioned resources before a later write and use the latest resource version.
 
 ## Contact
 
-For privacy-related questions, contact:
-
-zhaohaoduo@dsers.com
+For privacy or security questions, contact `zhaohaoduo@dsers.com`.

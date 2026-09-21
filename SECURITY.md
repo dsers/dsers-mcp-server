@@ -6,60 +6,24 @@ DSers MCP is a hosted remote MCP server operated by DSers at:
 https://ai.dsers.com/mcp
 ```
 
-This public repository contains documentation and metadata only. It does not contain backend source code, production secrets, OAuth tokens, browser cookies, private API keys, or user data.
+This public repository contains documentation and metadata only. It does not contain the production backend, credentials, OAuth tokens, browser cookies, private API keys, or customer data.
 
 ## Authentication
 
-DSers MCP uses OAuth 2.1 + PKCE. Users authorize through DSers OAuth. MCP clients should not ask users to paste DSers passwords, MFA codes, backend API keys, store tokens, browser cookies, or manual Authorization headers.
+DSers MCP uses OAuth 2.1 with PKCE. Clients should discover authorization through `/.well-known/oauth-protected-resource`; users must not paste passwords, MFA codes, API keys, store tokens, cookies, or manual Authorization headers into MCP configuration.
 
-The hosted server publishes:
+The MCP BFF validates Bearer tokens and enforces tool roles and OAuth scopes. Business services continue to enforce account ownership for requested resources.
 
-- `/.well-known/oauth-protected-resource`
-- `/.well-known/oauth-authorization-server`
-- `/oauth/register`
-- `/oauth/authorize`
-- `/oauth/token`
+## Safe operation
 
-## Data Handling
+- Copy exact store, product, supplier, order, task, and variant identifiers from DSers tool results.
+- Preview current state before dangerous writes and obtain explicit user confirmation immediately before invocation.
+- Use the latest resource version for versioned mutations.
+- Never automatically retry an uncertain write; inspect current state first.
+- Treat asynchronous task creation as pending until `get_job_status` reports a terminal result.
 
-The hosted service processes DSers account, store, product, supplier, and operational metadata only as needed for user-requested workflows. Product and store data is processed during requests and is not stored in this public repository.
+## Reporting security issues
 
-See [Privacy and Security](docs/privacy.md) and the hosted policy at:
+For non-sensitive documentation or connection questions, open a [GitHub issue](https://github.com/dsers/dsers-mcp-server/issues).
 
-```text
-https://mcp.dsers.com/privacy-policy
-```
-
-## Support and Issues
-
-For non-sensitive documentation, connection, client compatibility, or usage questions, open a public GitHub issue:
-
-```text
-https://github.com/dsers/dsers-mcp-server/issues
-```
-
-## Reporting Security Issues
-
-For vulnerabilities, secrets, tokens, or account-specific data, use private email instead of a public issue. Send security-sensitive reports to:
-
-```text
-zhaohaoduo@dsers.com
-```
-
-Include:
-
-- affected endpoint or tool name
-- impact summary
-- reproduction steps
-- relevant timestamps
-- whether any account data or tokens may have been exposed
-
-Do not include OAuth tokens, passwords, cookies, or full customer data in the report. Redact sensitive fields.
-
-## Safe Use Guidance
-
-- Use OAuth instead of API keys or cookies.
-- Use `backend_only` for store pushes unless the user explicitly requests live publishing.
-- Require confirmation before `dsers_store_push`, `dsers_product_delete`, or `dsers_sku_remap mode=apply`.
-- Preview supplier replacement with `dsers_sku_remap mode=preview` before applying it.
-- Revoke and reconnect the MCP session if a client device or OAuth session may be compromised.
+For vulnerabilities, secrets, tokens, or account-specific data, email `zhaohaoduo@dsers.com`. Include the affected endpoint or tool, impact, reproduction steps, and relevant timestamps. Redact tokens, passwords, cookies, addresses, and customer data.

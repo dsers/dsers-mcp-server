@@ -1,328 +1,129 @@
 # 工具清单
 
-DSers Official MCP Server 提供面向 dropshipping 工作流的 AI 工具。
-
-## 推荐优先调用
-
-### `dsers_store_discover`
-
-获取当前 DSers 账号下可用店铺和规则能力。多数流程建议先调用它。
-
-常用参数：
-
-- `target_store`：可选。按 store ID 或名称过滤。
-
-返回重点：
-
-- `store_discovery.state`
-- `stores[].id`
-- `stores[].name`
-- `stores[].platform`
-- `stores[].currency`
-- `stores[].ship`
-- `rules.pricing`
-- `rules.content`
-- `rules.images`
-- `plan_issue`
-
-`store_discovery.state` 用于区分已连接店铺、无店铺、授权问题、上游异常、响应结构变化和目标店铺未命中。成功发现店铺时，也可能返回 `mcp_update`，提示客户端刷新工具、重新授权或重装 MCP 连接。
-
-## 规则校验
-
-### `dsers_rules_validate`
-
-校验规则对象是否能被当前 DSers/店铺能力支持。适合在导入或更新前检查 pricing/content/images/variant rules。
-
-常用参数：
-
-- `rules`：JSON 字符串
-- `target_store`：可选
-
-示例：
-
-```json
-{
-  "pricing": {
-    "mode": "fixed_markup",
-    "fixed_markup": 5
-  },
-  "content": {
-    "title_prefix": "[US] "
-  },
-  "images": {
-    "keep_first_n": 5
-  }
-}
-```
-
-## 商品搜索与导入
-
-### `dsers_find_product`
-
-搜索 DSers 商品池，支持关键词搜索和图片搜索。
-
-常用参数：
-
-- `keyword`：关键词
-- `image_url`：图片 URL，传了它会优先走视觉搜索
-- `supplier`：`aliexpress`、`alibaba`、`ali1688`
-- `ship_to`：目的国家，默认 `US`
-- `ship_from`：发货国家
-- `sort`：`relevance`、`newest`、`price`
-- `limit`：每页数量，最大 50
-- `search_after`：翻页 cursor
-
-返回结果里的 `import_url` 可以直接传给 `dsers_product_import`。
-
-### `dsers_product_import`
-
-把供应商商品导入 DSers import list，并返回预览。支持单个 URL 或批量 URL。
-
-常用参数：
-
-- `source_url`：单商品 URL
-- `source_urls_json`：批量 JSON 数组
-- `source_hint`：`auto`、`aliexpress`、`alibaba`、`accio`
-- `country`：国家代码，默认 `US`
-- `target_store`：店铺 ID 或名称
-- `visibility_mode`：`backend_only` 或 `sell_immediately`
-- `rules_json`：规则 JSON 字符串
-- `batch_detail`：`summary` 或 `full`
-
-也可以用扁平参数快速设置规则：
-
-- `pricing_mode`
-- `pricing_multiplier`
-- `pricing_fixed_markup`
-- `pricing_fixed_price`
-- `title_override`
-- `title_prefix`
-- `title_suffix`
-- `description_override_html`
-- `description_append_html`
-
-返回重点：
-
-- `import_item_id`
-- `title`
-- `price_summary`
-- `variant_count`
-- `active_rules`
-
-`import_item_id` 是后续 preview/update/push/delete 的核心 handle。
-
-## 草稿预览与更新
-
-### `dsers_product_preview`
-
-重新读取已导入商品的 draft preview。
-
-常用参数：
-
-- `import_item_id`
-- `variant_detail`：`compact` 或 `full`
-- `variant_offset`
-- `variant_limit`
-- `show_all_options`
-- `include_images`
-
-使用建议：
-
-- 默认 `compact` 适合快速看所有 SKU。
-- 需要成本、compare_at、supplier_qty 时用 `variant_detail=full`。
-- 修改 option 前用 `show_all_options=true`。
-- 做供应商匹配时用 `include_images=true`。
-
-### `dsers_product_update_rules`
-
-更新已导入商品的规则，适合先导入，再由 LLM 改标题、描述、价格或变体。
-
-常用参数：
-
-- `import_item_id`
-- `rules_json`
-- `target_store`
-- `visibility_mode`
-
-规则合并方式：
-
-- `pricing`、`images`、`variant_overrides` 按 family 替换。
-- `title_prefix`、`title_suffix`、`description_append_html` 是 slot，重复调用会替换旧 slot。
-- `option_edits` 是完整替换，不是增量合并。
-- `remove_value` option edit 会删除匹配的 draft variants。
-- 传 `{"pricing": null}` 可移除该规则 family。
-
-如果规则持久化到 DSers 失败，工具会报错，避免后续 push 使用旧 draft。
-
-## 列表与已发布商品
-
-### `dsers_import_list`
-
-浏览 DSers import list，也就是待推送商品列表。
-
-常用参数：
-
-- `page`
-- `page_size`
-
-返回重点：
-
-- `import_item_id`
-- `title`
-- `sell_price_range`
-- `cost_range`
-- `variant_count`
-- `total_stock`
-- `push_status`
-- `source_url`
-
-### `dsers_my_products`
-
-浏览某个店铺里已经推送过的 DSers 商品。
-
-常用参数：
-
-- `store_id`：来自 `dsers_store_discover`
-- `page`
-- `page_size`
-
-返回重点：
-
-- `dsers_product_id`
-- `title`
-- `sell_price`
-- `cost`
-- `status`
-- `supplier_url`
-
-`dsers_product_id` 是 `dsers_sku_remap` 的输入。
-
-## 店铺推送
-
-### `dsers_store_push`
-
-把 import draft 推送到 Shopify/Wix。
-
-常用参数：
-
-- `import_item_id`
-- `import_item_ids_json`
-- `target_store`
-- `target_stores_json`
-- `visibility_mode`
-- `push_options_json`
-- `force_push`
-
-推荐默认：
-
-```json
-{
-  "visibility_mode": "backend_only"
-}
-```
-
-安全机制：
-
-- 售价低于成本会 block
-- 售价为 0 会 block
-- 所有 variants 零库存会 block
-- 空 variants 会 block
-- 低利润、低库存、低价会 warning
-
-只有在明确告知风险并获得用户确认后，才允许使用 `force_push=true`。
-
-## 删除
-
-### `dsers_product_delete`
-
-从 DSers import list 删除商品，不可恢复。
-
-常用参数：
-
-- `import_item_id`
-- `confirm`
-
-调用协议：
-
-1. 第一次调用不要传 `confirm=true`。
-2. 把返回的确认信息展示给用户。
-3. 用户明确确认后，再传 `confirm=true`。
-
-注意：它只删除 DSers import list 中的 draft，不删除已经发布到店铺前台的商品。
-
-## 库存策略
-
-### `dsers_inventory_policy_get`
-
-读取 DSers 账号库存同步策略。
-
-返回重点：
-
-- 供应商商品不可用时的处理方式
-- 单个 variant 不可用时的处理方式
-- 是否自动同步库存
-- 每个设置的可读标签
-
-这是只读工具，不会修改账号设置。
-
-## 供应商替换
-
-### `dsers_alt_supplier_list`
-
-列出某个 DSers 商品已经绑定的主供应商和备选供应商。
-
-常用参数：
-
-- `dsers_product_id`
-- `variant_detail`
-
-返回重点：
-
-- 供应商 URL
-- 供应商平台和 app ID
-- 商品标题和图片
-- variant 数量
-- 供应商原生币种和币种来源
-
-选择要传给 `dsers_sku_remap` 的供应商 URL 前，建议先调用这个工具。
-
-### `dsers_sku_remap`
-
-替换已上架商品的供应商，并做 SKU/variant 级匹配。
-
-两种模式：
-
-- Strict：传 `new_supplier_url`，使用指定供应商
-- Discover：不传 `new_supplier_url`，工具基于图片反搜候选供应商
-
-常用参数：
-
-- `dsers_product_id`：来自 `dsers_my_products`
-- `store_id`：来自 `dsers_store_discover`
-- `new_supplier_url`：可选
-- `mode`：`preview` 或 `apply`
-- `country`：默认 `US`
-- `auto_confidence`：默认 70
-- `max_candidates`：Discover 模式候选数量
-
-正确流程：
-
-1. 先 `mode=preview`。
-2. 检查 `diffs`、`summary`、`top_candidates`、`warnings`。
-3. 确认匹配正确。
-4. 再 `mode=apply`。
-
-不要跳过 preview 直接 apply。
-
-## Prompt 模板
-
-服务端还提供 4 个 prompt/workflow 模板：
-
-| 名称 | 用途 |
-| --- | --- |
-| `dsers_workflow_quick-import` | 单商品导入并推送草稿 |
-| `dsers_workflow_bulk-import` | 多商品批量导入并套价格倍率 |
-| `dsers_workflow_multi-push` | 一个商品推送到所有已连接 Shopify/Wix 店铺 |
-| `dsers_workflow_seo-optimize` | 导入后由 LLM 改标题/描述，再推送 |
-
-这些是客户端可选的快捷工作流，不是必须调用的工具。
+DSers Official MCP Server 当前提供 60 个工具。服务只声明 MCP Tools，不提供 MCP Prompts 或 Resources。
+
+客户端看到的工具会根据登录身份的 role 和 OAuth scopes 过滤。所有已注册工具都支持 `admin`、`dsers`、`mcp` 三类 role；绝大多数工具还要求一个或多个 scope，`find_feature_entry` 是唯一明确不访问受保护业务资源的工具。
+
+## 账号、套餐、账单与导航
+
+| 工具 | 风险 | 用途 |
+|---|---|---|
+| `get_account_profile` | read | 获取当前账号资料、时区、权限和子账号。 |
+| `get_plan_and_credits` | read | 获取有效套餐、权益与 AI Credits 余额。 |
+| `get_plan_and_credit_billing` | read | 查询套餐购买或 AI Credits 用量，或获取发票下载地址。 |
+| `get_order_paymentlink_and_billing` | read | 查询账号所属的订单账单记录。 |
+| `recommend_apps_to_install` | read | 查找当前用户可见但尚未安装的销售或供应商应用，不会自动安装。 |
+| `find_feature_entry` | read | 当没有合适 MCP 工具时查找 DSers 页面入口；打开前应先询问用户。 |
+
+## 店铺与平台设置
+
+| 工具 | 风险 | 用途 |
+|---|---|---|
+| `list_stores` | read | 获取已连接店铺、供应商应用、币种、Pricing Rule、Shipping Profile 与发布能力。 |
+| `list_shopify_shipping_zones` | read | 获取指定 Shopify 店铺的 Markets 国家或地区。 |
+| `create_shopify_shipping_profile` | write | 在用户明确确认后，为指定 Shopify 店铺创建一个带区域和平邮费率的 Shipping Profile。 |
+| `list_supported_countries` | read | 获取 DSers 支持的国家、稳定 ID 与 ISO code。 |
+| `list_platform_shipping_methods` | read | 获取指定供应商平台和目的地支持的物流服务。 |
+| `start_store_connection` | write | 返回连接可见销售或供应商应用所需的签名授权地址。 |
+| `start_store_reauthorization` | write | 返回指定自有店铺的重新授权地址。 |
+
+## 供应商选品
+
+| 工具 | 风险 | 用途 |
+|---|---|---|
+| `list_supplier_search_filters` | read | 获取供应商应用、分类以及支持的搜索条件。 |
+| `search_supplier_products` | read | 按关键词、图片、分类、价格和平台条件搜索供应商商品。 |
+| `list_featured_product_collections` | read | 获取精选商品灵感集合。 |
+| `get_supplier_product` | read | 获取供应商商品的选项、变体、库存、媒体与来源地址。 |
+| `list_supplier_product_shipping_methods_and_cost` | read | 获取供应商商品可用的物流方式与运费报价。 |
+
+## 待发布商品与 Pricing Rule
+
+| 工具 | 风险 | 用途 |
+|---|---|---|
+| `list_pre_publish_products` | read | 分页搜索 DSers 待发布商品列表。 |
+| `get_pre_publish_product` | read | 获取一件待发布商品的可编辑快照和 resource version。 |
+| `get_pre_publish_product_organization` | read | 获取最多 100 件商品的 Category、Organization 可选项与当前选择。 |
+| `get_push_shipping_recommendation` | read | 准备发布时，按商品和店铺读取物流候选。 |
+| `get_pricing_rule` | read | 获取指定店铺完整的 Basic、Advanced 与 AI Custom Pricing Rule。 |
+| `create_pre_publish_products` | write | 将 1–10 个精确供应商商品加入待发布列表。 |
+| `update_pre_publish_product_content` | dangerous | 使用当前 resource version 修改内容、媒体、包裹、选项、变体、SKU 或库存。 |
+| `update_pre_publish_product_price` | dangerous | 在预览和明确确认后修改精确变体价格或设置统一价格。 |
+| `update_pre_publish_product_organization` | write | 批量修改最多 100 件商品的 Category、Organization 或 URL handle。 |
+| `update_pricing_rule` | write | 更新支持的 Pricing Rule、尾数与店铺汇率配置。 |
+| `delete_pre_publish_products` | dangerous | 删除 1–20 个精确待发布商品 ID；按条件删除前必须先冻结精确 ID。 |
+
+## 已发布商品与 Mapping
+
+| 工具 | 风险 | 用途 |
+|---|---|---|
+| `list_managed_store_products` | read | 搜索 DSers 管理的店铺商品与 Mapping 状态。 |
+| `search_store_products` | read | 搜索销售平台商品，并标明是否已导入 DSers。 |
+| `get_managed_store_product` | read | 获取销售变体、供应商 Mapping、媒体、同步设置与库存。 |
+| `get_store_product_mapping` | read | 获取已管理商品的 MCP-safe Basic 或 Advanced Mapping。 |
+| `simulate_pricing_rule` | read | 使用提供或已映射的供应商成本计算销售价格。 |
+| `search_ai_mapping_candidates` | read | 图片搜索供应商候选，并返回最近一次 AI Mapping Job 状态。 |
+| `start_ai_product_mapping` | dangerous | 为精确商品和供应商候选创建 AI Mapping 计算任务。 |
+| `apply_ai_mapping` | dangerous | 在重新预览和二次确认后应用一个成功的 AI Mapping task。 |
+| `apply_product_mapping` | dangerous | 更新精确的 Basic 或 Advanced Mapping 关系并校验保存结果。 |
+| `import_store_products_to_dsers` | write | 将同一店铺的 1–5 个精确销售商品导入 DSers 管理。 |
+| `update_managed_store_product` | dangerous | 修改选定销售变体，并明确处理相关自动同步设置。 |
+| `update_store_product_price_in_bulk` | dangerous | 为 1–20 个店铺创建全店手工价格更新任务。 |
+
+## 发布
+
+| 工具 | 风险 | 用途 |
+|---|---|---|
+| `publish_products_to_stores` | dangerous | 完整预检后，将选定待发布商品发布到明确选择的店铺。 |
+| `get_job_status` | read | 查询当前账号所属异步任务的标准化进度与结果。 |
+
+发布成功创建任务时会返回 `task_type` 和 `task_id`。必须把两者原样传给 `get_job_status`；创建任务不代表所有目标已经完成。
+
+## 订单与履约
+
+| 工具 | 风险 | 用途 |
+|---|---|---|
+| `list_orders` | read | 使用 cursor 分页查询账号所属订单摘要和可选计数。 |
+| `get_order` | read | 获取指定订单、供应商平台与订单 tab 的完整详情。 |
+| `diagnose_order_issue` | read | 诊断精确订单或一页搜索结果的下单阻塞原因。 |
+| `validate_order_address` | read | 按平台支持的字段规则校验订单当前保存地址。 |
+| `update_order_information` | dangerous | 修改选定地址、备注、供应商留言或物流方式字段。 |
+| `update_order_supplier` | dangerous | 修改一个订单商品的供应商商品或履约变体。 |
+| `place_orders_to_suppliers` | dangerous | 按精确订单或标准化筛选条件发起供应商下单。 |
+| `update_supplier_order` | write | 发起异步供应商订单详情刷新。 |
+| `sync_existing_tracking_numbers_to_store` | dangerous | 确认后把已有供应商 Tracking 数据发送到销售平台。 |
+| `update_tracking_numbers_to_store` | dangerous | 替换选定销售商品的 Tracking Number 列表并发送到销售平台。 |
+| `create_order_payment_link` | dangerous | 创建对应的待付款 checkout 流程，本工具不会直接扣款。 |
+| `send_buyer_tracking_notification` | dangerous | 异步触发 Shopify 买家物流通知。 |
+| `cancel_supplier_order` | dangerous | 发起符合条件的 Agent 或 1688 Dropshipping 供应商订单取消。 |
+
+## 包裹与供应商品变更
+
+| 工具 | 风险 | 用途 |
+|---|---|---|
+| `list_packages` | read | 获取账号所属包裹，包括异常视图。 |
+| `get_package_details` | read | 通过归属校验后读取物流详情。 |
+| `sync_supply_order_tracking_number` | write | 为一个账号所属 Tracking Number 发起异步刷新。 |
+| `list_supplier_product_change_notifications` | read | 获取已映射供应商品的成本、库存、SKU 与可用性变化通知。 |
+
+## 安全与一致性规则
+
+- 工具输入不会暴露 `confirm`、`confirmation_id` 或 `idempotency_key`。
+- dangerous 操作要求 Agent 先展示精确目标和实质影响，并在调用前取得用户明确确认。
+- 必须从之前的 DSers 工具结果复制精确 ID，不能推测店铺、商品、供应商、订单、任务或变体 ID。
+- 有版本控制的修改必须使用对应读取工具返回的最新 resource version。
+- 上游结果未知的写请求不可自动重试；必须先重新读取当前状态。
+- 异步任务创建成功不等于业务完成；使用返回的 `task_type + task_id` 查询 `get_job_status`。
+
+## 结构化错误
+
+工具失败时返回机器可读 JSON，常用错误码包括：
+
+- `UNAUTHORIZED`：token 缺失、无效或已过期。
+- `FORBIDDEN`：当前身份无权使用工具或访问资源。
+- `INSUFFICIENT_SCOPE`：需要按 `required_scopes` 重新授权。
+- `PLAN_RESTRICTION`：当前套餐或 AI Credits 权益不允许操作。
+- `VALIDATION_ERROR`：先修正参数再调用。
+- `RATE_LIMITED`：等待返回的 rate-limit 时间窗。
+- `UPSTREAM_TIMEOUT` 或 `UPSTREAM_ERROR`：只有 `retryable=true` 时才可自动重试。
+- `UPSTREAM_UNKNOWN`：写请求可能已到达 DSers；先检查当前状态，禁止自动重试。

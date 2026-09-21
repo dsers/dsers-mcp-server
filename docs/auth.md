@@ -1,61 +1,43 @@
 # Authentication
 
-DSers MCP uses OAuth 2.1 + PKCE.
-
-Do **not** configure API keys.  
-Do **not** manually add an `Authorization` header.  
-Do **not** paste DSers backend API keys, store tokens, or browser cookies into an MCP client.
-
-## Remote Endpoint
+DSers MCP uses OAuth 2.1 with PKCE. Configure only the remote MCP URL:
 
 ```text
 https://ai.dsers.com/mcp
 ```
 
-## Authentication Flow
+Do not configure an API key, copy an access token between clients, or manually add an `Authorization` header.
 
-1. Add the DSers MCP server URL in your MCP client.
-2. On first tool use, the client opens the DSers authorization page.
-3. Sign in with your DSers account and approve access.
-4. Return to the MCP client and start calling tools.
+## Discovery and authorization
 
-## OAuth Discovery Endpoints
-
-The hosted server publishes the OAuth metadata required by remote MCP clients:
-
-- `GET https://ai.dsers.com/.well-known/oauth-protected-resource`
-- `GET https://ai.dsers.com/.well-known/oauth-authorization-server`
-- `POST https://ai.dsers.com/oauth/register`
-- `GET https://accounts.dsers.com/accounts/mcp_oauth_v2` (authorization page, as declared by `authorization_endpoint` in the metadata)
-- `POST https://ai.dsers.com/oauth/token`
-
-The server supports Dynamic Client Registration, authorization-code flow with PKCE `S256`, refresh-token grant, and RFC 8707 resource binding for:
+The protected resource publishes RFC 9728 metadata at:
 
 ```text
-https://ai.dsers.com/mcp
+GET https://ai.dsers.com/.well-known/oauth-protected-resource
 ```
 
-MCP clients should let the OAuth flow run normally. Do not copy tokens between clients; each client manages its own OAuth session.
+An unauthenticated MCP request returns `401`, a `WWW-Authenticate` header containing the protected-resource metadata URL, and a machine-readable body that directs the client to OAuth authorization.
 
-## ChatGPT App Notes
+The metadata identifies the authorization server and the OAuth scopes used by the currently registered tools. A compatible MCP client should discover the authorization server, open the DSers authorization page, complete authorization-code + PKCE, and then send the issued Bearer token on MCP requests.
 
-For ChatGPT Apps, use the same MCP endpoint:
+## Roles and scopes
 
-```text
-https://ai.dsers.com/mcp
-```
+Authorization is enforced at two levels:
 
-ChatGPT discovers OAuth through the protected-resource metadata and completes the authorization-code + PKCE flow. The current public submission target is data-only and does not require a widget iframe.
+1. The HTTP entry point verifies the Bearer token through the configured DSers OAuth verification service.
+2. Tool listing and execution enforce each tool's allowed roles and required OAuth scopes.
 
-## Requirements
+Registered tools support the `admin`, `dsers`, and `mcp` roles. External OAuth callers must also have the scopes required by the selected tool. Some tools resolve a narrower scope set from the actual arguments.
 
-- A DSers account
-- At least one Shopify or Wix store connected in DSers
-- An MCP client with remote HTTP MCP and OAuth 2.1 + PKCE support
+If scopes are missing, the tool returns `INSUFFICIENT_SCOPE` with `required_scopes`. Reauthorize the MCP connection; do not fabricate a token or retry unchanged credentials.
 
-## Important Notes
+## Common failures
 
-- If authorization fails, reconnect DSers MCP or re-run the login flow in your MCP client.
-- For team environments, use a dedicated DSers account instead of sharing a personal account.
-- Revoke access if you suspect an account session has been exposed.
-- This public repository does not store user credentials, access tokens, browser cookies, or backend source code.
+- `401 UNAUTHORIZED`: connect or reauthorize through the client UI.
+- `403 FORBIDDEN`: the authenticated account or role cannot use the requested tool or resource.
+- `INSUFFICIENT_SCOPE`: reauthorize with the returned scopes.
+- `503 service_unavailable`: the verification service is temporarily unavailable; retry later rather than forcing a new login.
+
+## Credential safety
+
+Never put DSers passwords, MFA codes, backend API keys, store tokens, browser cookies, OAuth codes, access tokens, or refresh tokens in prompts, tool arguments, GitHub issues, or screenshots. Each MCP client should manage its own OAuth session.

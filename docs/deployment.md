@@ -2,30 +2,33 @@
 
 This public repository documents the DSers-hosted remote MCP server. It does not contain backend source code, self-hosting instructions, production deployment scripts, or secrets.
 
-## Production Endpoint
+## Production endpoint
 
 ```text
 https://ai.dsers.com/mcp
 ```
 
-The production endpoint is operated by DSers. Users and reviewers should use this URL for ChatGPT App review, MCP registry metadata, and MCP-compatible clients.
+The service uses Streamable HTTP and is operated by DSers.
 
-## ChatGPT App Review Shape
+## Protocol surface
 
-The current ChatGPT App submission target is data-only:
+The current server is data-only:
 
-- no iframe or widget resource
-- no `dsers_app_render` tool
-- normal MCP text / JSON tool results
-- OAuth login through the DSers authorization flow
+- 60 MCP tools
+- no MCP prompts
+- no MCP resources
+- no iframe or widget tool
+- OAuth discovery through Protected Resource Metadata
 
-## Review Expectations
+## Release verification
 
-Before review, verify from outside DSers internal networks that:
+Before publishing registry or ChatGPT App metadata, verify from outside DSers internal networks that:
 
-- the production MCP URL is reachable over HTTPS
-- unauthenticated MCP requests trigger OAuth discovery instead of a generic server error
-- ChatGPT OAuth completes without API keys, cookies, MFA, SMS, email challenge, VPN, or manual token copying
-- the tool list matches [`manifest.json`](../manifest.json) and [`chatgpt-app-submission.json`](../chatgpt-app-submission.json)
+- the production URL is reachable over HTTPS;
+- unauthenticated requests return OAuth discovery information;
+- OAuth completes without API keys, cookies, manual token copying, VPN, or internal-network access;
+- the runtime tool names match `manifest.json` and `chatgpt-app-submission.json`;
+- read, write, dangerous, and open-world annotations match the deployed schemas;
+- the deployed MCP server version is reflected consistently in public release metadata.
 
-For normal documentation or connection issues, use GitHub Issues. For vulnerabilities, tokens, or account-specific data, use the private security contact in [`SECURITY.md`](../SECURITY.md).
+For normal documentation or connection issues, use GitHub Issues. For vulnerabilities, tokens, or account-specific data, use the private contact in [`SECURITY.md`](../SECURITY.md).

@@ -1,91 +1,50 @@
 # ChatGPT App Submission Notes
 
-This repository contains the public metadata package for submitting the DSers hosted MCP server as a ChatGPT App.
-
-## Submission Shape
-
-- App type: data-only ChatGPT App
-- MCP endpoint: `https://ai.dsers.com/mcp`
-- Transport: Streamable HTTP
-- Authentication: OAuth 2.1 + PKCE through DSers
-- Widget / iframe: not required for the current submission
-- Tool surface: 13 DSers domain tools
-
-The current submission intentionally does not rely on an iframe widget. ChatGPT receives normal MCP tool results and writes the user-facing summary in chat.
-
-## Required Public Files
-
-- [`server.json`](../server.json) - MCP registry metadata
-- [`manifest.json`](../manifest.json) - app metadata, tool list, prompts, privacy URL, and remote endpoint
-- [`chatgpt-app-submission.json`](../chatgpt-app-submission.json) - app info, tool hint justifications, positive test cases, and negative test cases
-- [`docs/auth.md`](auth.md) - OAuth and endpoint documentation
-- [`docs/privacy.md`](privacy.md) - hosted privacy and data handling summary
-- [`docs/tools.md`](tools.md) - public tool reference
-- [`docs/chatgpt-app-e2e-playbook.md`](chatgpt-app-e2e-playbook.md) - review-facing live test chain
-
-## App Info
+## Submission shape
 
 - Display name: DSers
-- Subtitle: Import products to stores
-- Category: Shopping
-- Company URL: `https://www.dsers.com`
-- Privacy policy URL: `https://mcp.dsers.com/privacy-policy`
-- Support contact: `zhaohaoduo@dsers.com`
+- Remote endpoint: `https://ai.dsers.com/mcp`
+- Transport: Streamable HTTP
+- Authentication: OAuth 2.1 with PKCE
+- Surface: data-only MCP tools
+- Widget or iframe resource: none
+- MCP prompts or resources: none
+- Current tool inventory: 60 tools
 
-## Tool Hints
+ChatGPT receives standard MCP tool results and writes the user-facing response in chat.
 
-Every tool in `chatgpt-app-submission.json` has explicit:
+## Source files
 
-- `readOnlyHint`
-- `openWorldHint`
-- `destructiveHint`
+- [`manifest.json`](../manifest.json) contains the public app metadata and the same 60-tool inventory.
+- [`chatgpt-app-submission.json`](../chatgpt-app-submission.json) contains tool annotations, justifications, positive test cases, and negative test cases.
+- [`docs/tools.md`](tools.md) is the human-readable tool catalog.
+- [`docs/auth.md`](auth.md) describes discovery, roles, scopes, and failure handling.
+- [`docs/privacy.md`](privacy.md) describes current data processing and storage categories.
 
-Important write-action classifications:
+## Tool annotations
 
-- `dsers_product_import` creates a private DSers import-list draft.
-- `dsers_product_update_rules` can overwrite draft content/rules and remove draft variants through option edits, so it is marked destructive.
-- `dsers_store_push` can create or publish connected-store listings after confirmation, so it is marked open-world and destructive.
-- `dsers_product_delete` deletes a private import-list item after confirmation, so it is marked destructive.
-- `dsers_sku_remap` preview is non-persistent, but apply mode can overwrite supplier mappings after confirmation, so the tool is marked destructive.
+The submission classifies every tool using the current BFF risk policy:
 
-## OAuth Review Requirements
+- 34 read tools use `readOnlyHint=true` and `destructiveHint=false`.
+- 9 write tools use `readOnlyHint=false` and `destructiveHint=false`.
+- 17 dangerous tools use `readOnlyHint=false` and `destructiveHint=true`.
 
-The review account must be able to complete OAuth without MFA, SMS, email challenge, VPN, allowlisted IP, or manual token copying. It should contain sample DSers data:
+Tools that can directly change connected commerce-platform state or communicate with a buyer also use `openWorldHint=true`. Other tools remain bounded to DSers account or private workflow state.
 
-- at least one connected Shopify or Wix test store
-- import-list draft data or permission to create draft-only test imports
-- at least one pushed product for supplier mapping readback, if SKU remap review is required
+## Review account
 
-Do not provide API keys, cookies, manual Authorization headers, or DSers passwords in the submission text.
+The review account should contain enough non-sensitive sample data to exercise the selected review cases, such as a connected test store, visible supplier applications, supplier-product candidates, pre-publish products, managed products, orders, or packages. Tests should not require reviewers to enter API keys, cookies, internal network access, or manually copied tokens.
 
-Before submitting, test the demo account from outside DSers internal networks and confirm that the credentials are not expired.
+## Required safety behavior
 
-## Commerce Safety
-
-The ChatGPT App workflow manages merchant catalog drafts and store-push operations only. It does not perform checkout, supplier purchasing, invoice payment, or order settlement.
-
-Negative tests should confirm the app refuses prohibited or regulated goods requests and does not call DSers tools for adult sexual goods, gambling products, drugs, CBD/THC or drug paraphernalia, prescription or age-restricted medications, counterfeit or replica goods, malware or surveillance products, tobacco or nicotine products, weapons, fake IDs, fraud tools, or other high-risk services.
-
-## Review Test Coverage
-
-Use [`chatgpt-app-submission.json`](../chatgpt-app-submission.json) for dashboard import and [`docs/chatgpt-app-e2e-playbook.md`](chatgpt-app-e2e-playbook.md) for manual replay.
-
-The minimum test set covers:
-
-- OAuth and store discovery
-- rule validation
-- inventory policy readback
-- supplier search across AliExpress, Alibaba, and 1688
-- private draft import and text preview
-- private draft rule update and text preview
-- import-list browsing
-- push confirmation without immediate execution
-- pushed-products readback
-- alternate supplier list
-- SKU remap preview
-- import-list delete confirmation
-- negative prompts for unrelated tasks, credentials, payments, prohibited goods, unsafe publish, and no-preview supplier replacement
+- ChatGPT must use exact IDs returned by DSers tools and must not invent identifiers.
+- Dangerous operations require a current preview and explicit user confirmation immediately before invocation.
+- Tool schemas do not accept `confirm`, `confirmation_id`, or `idempotency_key`.
+- Versioned writes use the latest resource version.
+- `UPSTREAM_UNKNOWN` writes are never automatically retried.
+- Asynchronous creation is followed through `get_job_status` using the returned `task_type + task_id`.
+- Credentials and sensitive customer data are not echoed in responses.
 
 ## Maintenance
 
-For future updates, create a new draft version in the OpenAI dashboard rather than creating a new app. Update this repository and `chatgpt-app-submission.json` whenever tool names, descriptions, annotations, endpoint URLs, OAuth behavior, privacy data categories, or review test prompts change.
+Update this repository whenever registered tool names, descriptions, annotations, scopes, endpoint URLs, privacy categories, or review workflows change. The three inventories in the BFF catalog, `manifest.json`, and `chatgpt-app-submission.json` must remain identical.

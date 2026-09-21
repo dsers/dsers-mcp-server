@@ -2,9 +2,9 @@
   "manifest_version": "0.3",
   "name": "dsers-mcp-server",
   "display_name": "DSers Official MCP Server",
-  "version": "1.8.1",
-  "description": "Official DSers MCP for dropshipping: import, edit, price, and publish products to Shopify and Wix",
-  "long_description": "An MCP server that lets AI agents automate the DSers dropshipping workflow. Paste a product link from AliExpress, Alibaba, 1688, or Accio.com — your AI agent imports it, applies pricing rules, cleans up the title, and pushes it to a connected Shopify or Wix store. Supports bulk import, multi-store push, SEO optimization, and pre-push pricing and stock checks.",
+  "version": "1.8.4",
+  "description": "Official DSers MCP for account, store, supplier-product, publishing, Mapping, order, billing, and tracking workflows",
+  "long_description": "The official hosted DSers MCP service exposes tools for account and plan reads, store connection, supplier-product discovery, pre-publish product editing, Pricing Rules, store-product Mapping, publishing, orders, fulfillment, billing, packages, and tracking. OAuth roles and scopes control access, dangerous operations require explicit user confirmation, and asynchronous writes are checked through owner-scoped job status.",
   "author": {
     "name": "DSers",
     "url": "https://github.com/dsers"
@@ -27,11 +27,10 @@
     "aliexpress",
     "alibaba",
     "1688",
-    "accio",
-    "product-import",
-    "wix",
     "ecommerce",
-    "bulk-import"
+    "mcp",
+    "product-management",
+    "order-management"
   ],
   "remotes": [
     {
@@ -41,95 +40,244 @@
   ],
   "tools": [
     {
-      "name": "dsers_store_discover",
-      "description": "Retrieve Shopify or Wix stores, shipping methods, pricing rules, and push options"
+      "name": "get_account_profile",
+      "description": "Read the authenticated account profile, timezone, permissions, and subaccounts."
     },
     {
-      "name": "dsers_rules_validate",
-      "description": "Test pricing or title rules before applying — catches mistakes early"
+      "name": "get_plan_and_credits",
+      "description": "Read active subscriptions, plan benefits, and current AI Credit balances."
     },
     {
-      "name": "dsers_product_import",
-      "description": "Import a product from AliExpress, Alibaba, 1688, or Accio URL with optional pricing rules"
+      "name": "get_plan_and_credit_billing",
+      "description": "Read subscription purchases or AI Credit usage, or obtain an invoice download URL."
     },
     {
-      "name": "dsers_product_preview",
-      "description": "Review an imported product — title, price, variants, stock at a glance"
+      "name": "get_order_paymentlink_and_billing",
+      "description": "Search account-owned order billing records."
     },
     {
-      "name": "dsers_product_update_rules",
-      "description": "Update pricing, content, images, or variant rules on an already-imported product (incremental merge)"
+      "name": "recommend_apps_to_install",
+      "description": "Discover visible seller and supplier apps that are not installed. It never installs an app."
     },
     {
-      "name": "dsers_store_push",
-      "description": "Push products to Shopify or Wix — single, bulk, or all stores at once"
+      "name": "find_feature_entry",
+      "description": "Find a DSers page URL when no MCP tool supports the requested feature. Ask before opening it."
     },
     {
-      "name": "dsers_product_delete",
-      "description": "Delete a product from the DSers import list (irreversible, requires confirmation)"
+      "name": "list_stores",
+      "description": "List connected stores, supplier apps, currencies, Pricing Rule context, Shipping Profiles, and publishing capabilities."
     },
     {
-      "name": "dsers_find_product",
-      "description": "Search the DSers product pool by keyword or image — results link directly to import"
+      "name": "list_shopify_shipping_zones",
+      "description": "List Shopify Markets countries or regions for one owned Shopify store."
     },
     {
-      "name": "dsers_import_list",
-      "description": "Browse your import staging list with cost, sell price, stock, and markup status"
+      "name": "create_shopify_shipping_profile",
+      "description": "Create one Shopify Shipping Profile with a zone and flat rate after explicit confirmation."
     },
     {
-      "name": "dsers_my_products",
-      "description": "See products already pushed to a store, with supplier links for re-import"
+      "name": "list_supported_countries",
+      "description": "List DSers-supported countries with stable IDs and ISO codes."
     },
     {
-      "name": "dsers_alt_supplier_list",
-      "description": "List primary and alternate suppliers mapped to a DSers product, including supplier URLs and variant detail when requested"
+      "name": "list_platform_shipping_methods",
+      "description": "List supplier shipping services for one platform and destination."
     },
     {
-      "name": "dsers_inventory_policy_get",
-      "description": "Read the DSers account inventory sync policy for supplier out-of-stock and delisted-product behavior"
+      "name": "start_store_connection",
+      "description": "Return the signed authorization URL needed to connect a visible seller or supplier app."
     },
     {
-      "name": "dsers_sku_remap",
-      "description": "SKU-level supplier replacement for an already-pushed store product. Strict mode: provide new_supplier_url for an exact swap. Discover mode: omit it and the tool reverse-image-searches the DSers pool and auto-picks the best replacement via multi-factor ranking. Always preview before apply."
-    }
-  ],
-  "prompts": [
-    {
-      "name": "dsers_workflow_quick-import",
-      "description": "Import a single product and push to store as draft",
-      "arguments": [
-        "product_url",
-        "store_name"
-      ],
-      "text": "Import this product and push it to ${arguments.store_name} as a draft:\n${arguments.product_url}\n\nSteps: 1) dsers_store_discover. 2) dsers_product_import. 3) Show preview. 4) dsers_store_push with visibility_mode=backend_only."
+      "name": "start_store_reauthorization",
+      "description": "Return a reauthorization URL for one owned store."
     },
     {
-      "name": "dsers_workflow_bulk-import",
-      "description": "Batch import multiple products with pricing multiplier",
-      "arguments": [
-        "product_urls",
-        "price_multiplier",
-        "store_name"
-      ],
-      "text": "Bulk import these products with a ${arguments.price_multiplier}x price markup and push to ${arguments.store_name}:\n${arguments.product_urls}\n\nSteps: 1) dsers_store_discover. 2) dsers_product_import with rules. 3) Show previews. 4) dsers_store_push for each."
+      "name": "list_supplier_search_filters",
+      "description": "Discover supplier apps, categories, and supported search filters."
     },
     {
-      "name": "dsers_workflow_multi-push",
-      "description": "Push one product to all Shopify or Wix stores",
-      "arguments": [
-        "product_url"
-      ],
-      "text": "Import this product and push it to all connected Shopify or Wix stores returned by dsers_store_discover:\n${arguments.product_url}\n\nSteps: 1) dsers_store_discover — list Shopify or Wix stores. 2) dsers_product_import. 3) dsers_store_push with those stores."
+      "name": "search_supplier_products",
+      "description": "Search supplier products by keyword, image, category, price, and platform filters."
     },
     {
-      "name": "dsers_workflow_seo-optimize",
-      "description": "Import, AI-rewrite title & description for SEO, then push",
-      "arguments": [
-        "product_url",
-        "store_name",
-        "target_audience"
-      ],
-      "text": "Import this product and optimize for SEO before pushing to ${arguments.store_name}:\n${arguments.product_url}\nTarget audience: ${arguments.target_audience}\n\nWorkflow: 1) dsers_store_discover. 2) dsers_product_import — get raw preview. 3) Rewrite title and description for SEO. 4) Re-import with rules. 5) Show preview for approval. 6) dsers_store_push."
+      "name": "list_featured_product_collections",
+      "description": "List curated product-idea collections."
+    },
+    {
+      "name": "get_supplier_product",
+      "description": "Read supplier product options, variants, inventory, media, and source URL."
+    },
+    {
+      "name": "list_supplier_product_shipping_methods_and_cost",
+      "description": "Read available shipping methods and freight quotes for a supplier product."
+    },
+    {
+      "name": "list_pre_publish_products",
+      "description": "Search the DSers pre-publish/import list with stable pagination."
+    },
+    {
+      "name": "get_pre_publish_product",
+      "description": "Read the editable snapshot and resource version of one pre-publish product."
+    },
+    {
+      "name": "get_pre_publish_product_organization",
+      "description": "Read Category and Organization choices and current selections for up to 100 products."
+    },
+    {
+      "name": "get_push_shipping_recommendation",
+      "description": "Read per-product, per-store shipping candidates while preparing a publish request."
+    },
+    {
+      "name": "get_pricing_rule",
+      "description": "Read complete Basic, Advanced, and AI Custom Pricing Rule state for one store."
+    },
+    {
+      "name": "create_pre_publish_products",
+      "description": "Add one to ten exact supplier products to the pre-publish list."
+    },
+    {
+      "name": "update_pre_publish_product_content",
+      "description": "Update content, media, package data, options, variants, SKUs, or stock using a current resource version."
+    },
+    {
+      "name": "update_pre_publish_product_price",
+      "description": "Update exact variant prices or one fixed price after preview and explicit confirmation."
+    },
+    {
+      "name": "update_pre_publish_product_organization",
+      "description": "Update Category, Organization, or URL-handle fields for up to 100 products."
+    },
+    {
+      "name": "update_pricing_rule",
+      "description": "Update supported Pricing Rule, cents, and store-exchange-rate sections."
+    },
+    {
+      "name": "delete_pre_publish_products",
+      "description": "Delete one to twenty exact pre-publish product IDs; filtered deletion first freezes exact IDs."
+    },
+    {
+      "name": "list_managed_store_products",
+      "description": "Search DSers-managed store products and Mapping status."
+    },
+    {
+      "name": "search_store_products",
+      "description": "Search seller-platform products and see whether each is already imported."
+    },
+    {
+      "name": "get_managed_store_product",
+      "description": "Read seller variants, supplier mappings, media, sync settings, and inventory."
+    },
+    {
+      "name": "get_store_product_mapping",
+      "description": "Read the MCP-safe Basic or Advanced Mapping view for a managed product."
+    },
+    {
+      "name": "simulate_pricing_rule",
+      "description": "Calculate seller prices from supplied or mapped supplier costs."
+    },
+    {
+      "name": "search_ai_mapping_candidates",
+      "description": "Search visual supplier candidates and read the latest AI Mapping Job status."
+    },
+    {
+      "name": "start_ai_product_mapping",
+      "description": "Create an AI Mapping computation for an exact product and supplier candidate."
+    },
+    {
+      "name": "apply_ai_mapping",
+      "description": "Apply one successful AI Mapping task after a fresh preview and second confirmation."
+    },
+    {
+      "name": "apply_product_mapping",
+      "description": "Update exact Basic or Advanced Mapping relationships and verify the saved result."
+    },
+    {
+      "name": "import_store_products_to_dsers",
+      "description": "Import one to five exact seller products into DSers management."
+    },
+    {
+      "name": "update_managed_store_product",
+      "description": "Update selected seller variants with explicit automatic-sync decisions."
+    },
+    {
+      "name": "update_store_product_price_in_bulk",
+      "description": "Start a whole-store manual price-update task for one to twenty stores."
+    },
+    {
+      "name": "publish_products_to_stores",
+      "description": "Publish selected pre-publish products to explicitly selected stores after a complete preflight."
+    },
+    {
+      "name": "get_job_status",
+      "description": "Read normalized progress and results for an owner-scoped asynchronous task."
+    },
+    {
+      "name": "list_orders",
+      "description": "Search account-owned order summaries with cursor pagination and optional counts."
+    },
+    {
+      "name": "get_order",
+      "description": "Read rich detail for one exact order, supplier platform, and order tab."
+    },
+    {
+      "name": "diagnose_order_issue",
+      "description": "Explain placement blockers for exact orders or an order-search page."
+    },
+    {
+      "name": "validate_order_address",
+      "description": "Validate the saved address against supported platform field rules."
+    },
+    {
+      "name": "update_order_information",
+      "description": "Update selected address, note, supplier message, or shipping-method fields."
+    },
+    {
+      "name": "update_order_supplier",
+      "description": "Change the supplier product or fulfillment variant for one order item."
+    },
+    {
+      "name": "place_orders_to_suppliers",
+      "description": "Start supplier placement for exact orders or normalized order filters."
+    },
+    {
+      "name": "update_supplier_order",
+      "description": "Start an asynchronous supplier-order detail refresh."
+    },
+    {
+      "name": "sync_existing_tracking_numbers_to_store",
+      "description": "Send existing supplier tracking data to the sales channel after confirmation."
+    },
+    {
+      "name": "update_tracking_numbers_to_store",
+      "description": "Replace selected sales-side tracking numbers and send the new list to the sales channel."
+    },
+    {
+      "name": "create_order_payment_link",
+      "description": "Create the appropriate awaiting-payment checkout flow; it does not charge the user."
+    },
+    {
+      "name": "send_buyer_tracking_notification",
+      "description": "Trigger an asynchronous Shopify buyer tracking notification."
+    },
+    {
+      "name": "cancel_supplier_order",
+      "description": "Start cancellation of an eligible Agent or 1688 Dropshipping supplier order."
+    },
+    {
+      "name": "list_packages",
+      "description": "List account-owned tracking packages, including exception views."
+    },
+    {
+      "name": "get_package_details",
+      "description": "Read tracking details after ownership verification."
+    },
+    {
+      "name": "sync_supply_order_tracking_number",
+      "description": "Start an asynchronous refresh for one account-owned tracking number."
+    },
+    {
+      "name": "list_supplier_product_change_notifications",
+      "description": "List mapped supplier-product cost, stock, SKU, and availability changes."
     }
   ]
 }

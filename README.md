@@ -1,12 +1,8 @@
 # DSers Official MCP Server
 
-Official DSers MCP Server for AI-powered dropshipping automation.
+Official hosted Model Context Protocol server for operating DSers workflows from AI clients.
 
-This is the official DSers MCP Server, listed on the Official MCP Registry as `io.github.dsers/dsers-mcp-server`.
-
-The DSers Official MCP Server is a hosted remote Model Context Protocol server that allows MCP-compatible AI clients and ChatGPT Apps to work with DSers dropshipping workflows, including product search, product import, product optimization, variant editing, pricing rules, store publishing, and supplier replacement.
-
-This repository does **not** contain the DSers MCP server backend source code. It provides official public documentation, connection information, examples, and registry metadata for the DSers-hosted remote MCP server.
+This public repository contains connection information, user documentation, examples, and registry metadata for the DSers-hosted service. It does **not** contain the production backend source code.
 
 ## Remote MCP Endpoint
 
@@ -14,50 +10,40 @@ This repository does **not** contain the DSers MCP server backend source code. I
 https://ai.dsers.com/mcp
 ```
 
-## Transport
-
-Remote HTTP / Streamable HTTP.
-
-This server does not provide a local stdio server.
+The service uses Streamable HTTP and does not provide a local stdio server.
 
 ## Authentication
 
-DSers MCP uses OAuth 2.1 + PKCE.
+DSers MCP uses OAuth 2.1 with PKCE. Add only the server URL to your MCP client. Do not paste DSers passwords, API keys, store tokens, browser cookies, or a manually copied `Authorization` header into client configuration.
 
-Do **not** configure API keys.  
-Do **not** manually add an `Authorization` header.  
-Do **not** paste DSers backend API keys, store tokens, or browser cookies into an MCP client.
+The protected resource publishes OAuth discovery metadata at:
 
-On first tool use, supported MCP clients open the DSers authorization page. After the user signs in and approves access, the client can call DSers MCP tools.
+```text
+https://ai.dsers.com/.well-known/oauth-protected-resource
+```
 
-For details, see [Authentication](docs/auth.md).
+After authorization, available tools are filtered by the authenticated role and OAuth scopes. See [Authentication](docs/auth.md).
 
-## Requirements
+## Current Capabilities
 
-You need:
+The current service exposes 60 tools grouped around:
 
-- A DSers account
-- At least one Shopify or Wix store connected in DSers
-- An MCP client that supports remote HTTP MCP and OAuth 2.1 + PKCE
+- account profile, plans, AI Credits, billing, and invoices
+- connected stores, store connection, reauthorization, and Shopify Shipping Profiles
+- supplier discovery, product search, product detail, and freight quotes
+- pre-publish products, content, price, category, organization, and Pricing Rules
+- managed store products, supplier Mapping, and AI-assisted Mapping
+- publishing products to stores and checking asynchronous job status
+- order search, diagnosis, editing, placement, payment, cancellation, and fulfillment
+- packages, tracking numbers, buyer notifications, and supplier-product change notifications
 
-Verified clients (tested end to end): ChatGPT Developer Mode, Claude Desktop, Cursor, Claude Code, Codex CLI, OpenClaw.
+The server advertises tools only. It does not expose MCP prompts, resources, or iframe widgets.
 
-Expected to work (any MCP client with remote HTTP + OAuth 2.1 + PKCE support): VS Code, Cline, Windsurf, Zed, Continue.
-
-## What You Can Do
-
-- Import products from AliExpress, Alibaba, 1688, Accio, or supported supplier sources
-- Apply pricing, title, description, image, and variant rules
-- Preview DSers drafts before pushing to Shopify or Wix
-- Search the DSers product pool
-- Browse DSers import-list drafts and already pushed products
-- Replace suppliers on existing store products with SKU-level matching
+The complete current tool catalog is in [Tools](docs/tools.md).
 
 ## Quick Start
 
-### Claude Desktop
-
-Add this to `claude_desktop_config.json`:
+### Generic MCP configuration
 
 ```json
 {
@@ -70,7 +56,7 @@ Add this to `claude_desktop_config.json`:
 }
 ```
 
-Restart Claude Desktop. On first tool use, the client starts OAuth and opens the DSers login page.
+On first connection, use the Sign in, Connect, Authorize, or Login action shown by your MCP client and complete the DSers authorization flow in the browser.
 
 ### Claude Code
 
@@ -79,85 +65,41 @@ claude mcp add dsers https://ai.dsers.com/mcp --transport http
 claude mcp login dsers
 ```
 
-### Cursor
-
-Open:
-
-```text
-Settings → Tools & Integrations → MCP Tools → Add / Connect
-```
-
-Use this server URL:
-
-```text
-https://ai.dsers.com/mcp
-```
-
-Cursor should start the OAuth flow automatically.
-
 ### Codex CLI
 
-After adding the MCP server, run:
+After adding the server, run:
 
 ```bash
 codex mcp login dsers
 ```
 
-If the client asks for the server URL, use:
-
-```text
-https://ai.dsers.com/mcp
-```
-
 ### ChatGPT App
 
-Use the remote endpoint in ChatGPT Developer Mode or the Apps dashboard:
+Add `https://ai.dsers.com/mcp` in ChatGPT Developer Mode or the Apps dashboard. The integration is data-only and returns normal MCP tool results without an iframe widget.
 
-```text
-https://ai.dsers.com/mcp
-```
+## Safety Model
 
-The current ChatGPT submission target is data-only: DSers exposes normal MCP tools and does not require an iframe widget. See [ChatGPT App submission notes](docs/chatgpt-app-submission.md).
+Tools are classified as read, write, or dangerous. State-changing workflows use exact resource identifiers, ownership checks, OAuth scopes, stale-state checks where applicable, and explicit user confirmation before dangerous calls. A write whose upstream completion is uncertain is reported as non-retryable; clients must inspect current state instead of automatically repeating it.
 
-### OpenClaw
-
-```bash
-openclaw mcp set dsers '{"url":"https://ai.dsers.com/mcp","transport":"streamable-http"}'
-```
-
-Transport and authorization support may vary by OpenClaw deployment. Follow the connection guide for your current environment.
+Tool failures use structured error codes so clients can distinguish reauthorization, missing scopes, plan restrictions, rate limits, validation failures, and uncertain upstream writes.
 
 ## Documentation
 
 - [Authentication](docs/auth.md)
 - [Tools](docs/tools.md)
+- [User guide](docs/user-guide.en.md)
+- [Examples](docs/examples.md)
 - [Privacy and Security](docs/privacy.md)
 - [ChatGPT App submission notes](docs/chatgpt-app-submission.md)
 - [ChatGPT App E2E playbook](docs/chatgpt-app-e2e-playbook.md)
-- [Hosted deployment notes](docs/deployment.md)
-- [Examples](docs/examples.md)
+- [Hosted service notes](docs/deployment.md)
 - [中文说明](README.zh-CN.md)
-
-## Example MCP Client Configuration
-
-```json
-{
-  "mcpServers": {
-    "dsers": {
-      "type": "http",
-      "url": "https://ai.dsers.com/mcp"
-    }
-  }
-}
-```
-
-A minimal example is also available at [`examples/remote-mcp.json`](examples/remote-mcp.json).
 
 ## Registry and Review Files
 
-- [`server.json`](server.json) - MCP registry metadata for the hosted remote server
-- [`manifest.json`](manifest.json) - public app metadata, tool list, prompts, and privacy URL
-- [`chatgpt-app-submission.json`](chatgpt-app-submission.json) - ChatGPT App review helper with tool hints and test prompts
+- [`server.json`](server.json) — MCP Registry metadata
+- [`manifest.json`](manifest.json) — public app metadata and tool inventory
+- [`chatgpt-app-submission.json`](chatgpt-app-submission.json) — ChatGPT App review metadata and test cases
 
 ## License
 
@@ -165,12 +107,6 @@ This public documentation and metadata repository is licensed under the [Apache 
 
 ## Support
 
-For non-sensitive documentation, connection, client compatibility, or usage questions, open a GitHub issue:
+For non-sensitive documentation, connection, client compatibility, or usage questions, open a [GitHub issue](https://github.com/dsers/dsers-mcp-server/issues).
 
-```text
-https://github.com/dsers/dsers-mcp-server/issues
-```
-
-For vulnerabilities, tokens, or account-specific data, contact:
-
-zhaohaoduo@dsers.com
+For vulnerabilities, tokens, or account-specific data, contact `zhaohaoduo@dsers.com`.

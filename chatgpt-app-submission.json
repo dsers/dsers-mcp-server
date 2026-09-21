@@ -3,345 +3,845 @@
   "schema_version": 1,
   "app_info": {
     "display_name": "DSers",
-    "subtitle": "Import products to stores",
-    "description": "DSers helps merchants search supplier products, import them into the DSers import list, inspect prices and variants, apply product rules, and push prepared drafts to connected Shopify or Wix stores through ChatGPT. This submission targets a data-only ChatGPT App surface with normal MCP tool results and no iframe widget.",
+    "subtitle": "Operate DSers workflows",
+    "description": "DSers lets merchants use ChatGPT to inspect account and store context, discover supplier products, prepare and publish products, manage product Mapping, work with orders and fulfillment, and review billing or tracking data. The app is data-only and uses normal MCP tool results without an iframe widget.",
     "category": "SHOPPING"
   },
   "tools": {
-    "dsers_store_discover": {
+    "get_account_profile": {
       "annotations": {
         "readOnlyHint": true,
         "openWorldHint": false,
         "destructiveHint": false
       },
       "justifications": {
-        "read_only_justification": "Only retrieves connected store metadata, shipping options, currencies, update guidance, and supported rule capabilities.",
-        "open_world_justification": "Does not write to public internet state or external storefronts.",
-        "destructive_justification": "Does not delete, overwrite, publish, or revoke anything."
+        "read_only_justification": "Read the authenticated account profile, timezone, permissions, and subaccounts.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
       }
     },
-    "dsers_rules_validate": {
+    "get_plan_and_credits": {
       "annotations": {
         "readOnlyHint": true,
         "openWorldHint": false,
         "destructiveHint": false
       },
       "justifications": {
-        "read_only_justification": "Only validates proposed rule JSON and returns warnings or normalized capabilities.",
-        "open_world_justification": "Does not write to public internet state or external storefronts.",
-        "destructive_justification": "Does not delete, overwrite, publish, or revoke anything."
+        "read_only_justification": "Read active subscriptions, plan benefits, and current AI Credit balances.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
       }
     },
-    "dsers_product_import": {
+    "get_plan_and_credit_billing": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Read subscription purchases or AI Credit usage, or obtain an invoice download URL.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "get_order_paymentlink_and_billing": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Search account-owned order billing records.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "recommend_apps_to_install": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Discover visible seller and supplier apps that are not installed. It never installs an app.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "find_feature_entry": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Find a DSers page URL when no MCP tool supports the requested feature. Ask before opening it.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "list_stores": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "List connected stores, supplier apps, currencies, Pricing Rule context, Shipping Profiles, and publishing capabilities.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "list_shopify_shipping_zones": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "List Shopify Markets countries or regions for one owned Shopify store.",
+        "open_world_justification": "The tool reads or changes state through an external platform, supplier, AI computation, fulfillment, checkout, publishing, authorization, or notification boundary.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "create_shopify_shipping_profile": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Create one Shopify Shipping Profile with a zone and flat rate after explicit confirmation.",
+        "open_world_justification": "The tool reads or changes state through an external platform, supplier, AI computation, fulfillment, checkout, publishing, authorization, or notification boundary.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "list_supported_countries": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "List DSers-supported countries with stable IDs and ISO codes.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "list_platform_shipping_methods": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "List supplier shipping services for one platform and destination.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "start_store_connection": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Return the signed authorization URL needed to connect a visible seller or supplier app.",
+        "open_world_justification": "The tool reads or changes state through an external platform, supplier, AI computation, fulfillment, checkout, publishing, authorization, or notification boundary.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "start_store_reauthorization": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Return a reauthorization URL for one owned store.",
+        "open_world_justification": "The tool reads or changes state through an external platform, supplier, AI computation, fulfillment, checkout, publishing, authorization, or notification boundary.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "list_supplier_search_filters": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Discover supplier apps, categories, and supported search filters.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "search_supplier_products": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Search supplier products by keyword, image, category, price, and platform filters.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "list_featured_product_collections": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "List curated product-idea collections.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "get_supplier_product": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Read supplier product options, variants, inventory, media, and source URL.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "list_supplier_product_shipping_methods_and_cost": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Read available shipping methods and freight quotes for a supplier product.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "list_pre_publish_products": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Search the DSers pre-publish/import list with stable pagination.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "get_pre_publish_product": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Read the editable snapshot and resource version of one pre-publish product.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "get_pre_publish_product_organization": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Read Category and Organization choices and current selections for up to 100 products.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "get_push_shipping_recommendation": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Read per-product, per-store shipping candidates while preparing a publish request.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "get_pricing_rule": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Read complete Basic, Advanced, and AI Custom Pricing Rule state for one store.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "create_pre_publish_products": {
       "annotations": {
         "readOnlyHint": false,
         "openWorldHint": false,
         "destructiveHint": false
       },
       "justifications": {
-        "read_only_justification": "Creates or updates a private DSers import-list draft from supplier product URLs.",
-        "open_world_justification": "Writes only to the merchant's private DSers import list and does not publish to a public storefront.",
-        "destructive_justification": "Does not irreversibly delete or publish content; it creates a private import draft."
+        "read_only_justification": "This tool changes DSers or connected-platform state: Add one to ten exact supplier products to the pre-publish list.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
       }
     },
-    "dsers_product_preview": {
-      "annotations": {
-        "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
-      },
-      "justifications": {
-        "read_only_justification": "Only reads an existing DSers import-list draft and returns product, price, stock, image, variant, and active-rule details.",
-        "open_world_justification": "Does not write to public internet state or external storefronts.",
-        "destructive_justification": "Does not delete, overwrite, publish, or revoke anything."
-      }
-    },
-    "dsers_product_update_rules": {
+    "update_pre_publish_product_content": {
       "annotations": {
         "readOnlyHint": false,
         "openWorldHint": false,
         "destructiveHint": true
       },
       "justifications": {
-        "read_only_justification": "Updates pricing, content, image, or variant rules on a private DSers import-list draft.",
-        "open_world_justification": "Writes only within the merchant's private DSers import-list draft and does not publish storefront content.",
-        "destructive_justification": "Can overwrite draft content or image rules, and option edits can remove variants from the private draft before push."
+        "read_only_justification": "This tool changes DSers or connected-platform state: Update content, media, package data, options, variants, SKUs, or stock using a current resource version.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
       }
     },
-    "dsers_store_push": {
+    "update_pre_publish_product_price": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Update exact variant prices or one fixed price after preview and explicit confirmation.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
+      }
+    },
+    "update_pre_publish_product_organization": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Update Category, Organization, or URL-handle fields for up to 100 products.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "update_pricing_rule": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Update supported Pricing Rule, cents, and store-exchange-rate sections.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "delete_pre_publish_products": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Delete one to twenty exact pre-publish product IDs; filtered deletion first freezes exact IDs.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
+      }
+    },
+    "list_managed_store_products": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Search DSers-managed store products and Mapping status.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "search_store_products": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Search seller-platform products and see whether each is already imported.",
+        "open_world_justification": "The tool reads or changes state through an external platform, supplier, AI computation, fulfillment, checkout, publishing, authorization, or notification boundary.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "get_managed_store_product": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Read seller variants, supplier mappings, media, sync settings, and inventory.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "get_store_product_mapping": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Read the MCP-safe Basic or Advanced Mapping view for a managed product.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "simulate_pricing_rule": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Calculate seller prices from supplied or mapped supplier costs.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "search_ai_mapping_candidates": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Search visual supplier candidates and read the latest AI Mapping Job status.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "start_ai_product_mapping": {
       "annotations": {
         "readOnlyHint": false,
         "openWorldHint": true,
         "destructiveHint": true
       },
       "justifications": {
-        "read_only_justification": "Pushes one or more prepared DSers drafts to connected Shopify or Wix stores after confirmation.",
-        "open_world_justification": "Can create or publish product listings on connected storefronts, including publicly visible listings when requested.",
-        "destructive_justification": "Pushing store listings is not fully reversible through DSers and requires explicit confirmation before execution."
+        "read_only_justification": "This tool changes DSers or connected-platform state: Create an AI Mapping computation for an exact product and supplier candidate.",
+        "open_world_justification": "The tool reads or changes state through an external platform, supplier, AI computation, fulfillment, checkout, publishing, authorization, or notification boundary.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
       }
     },
-    "dsers_product_delete": {
+    "apply_ai_mapping": {
       "annotations": {
         "readOnlyHint": false,
         "openWorldHint": false,
         "destructiveHint": true
       },
       "justifications": {
-        "read_only_justification": "Deletes a product from the merchant's DSers import list after confirmation.",
-        "open_world_justification": "Deletes only a private DSers import-list item and does not remove or publish public storefront content.",
-        "destructive_justification": "Permanently removes the selected import-list item and cannot be undone by the tool."
+        "read_only_justification": "This tool changes DSers or connected-platform state: Apply one successful AI Mapping task after a fresh preview and second confirmation.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
       }
     },
-    "dsers_import_list": {
-      "annotations": {
-        "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
-      },
-      "justifications": {
-        "read_only_justification": "Only lists private DSers import-list items and their price, cost, stock, and supplier metadata.",
-        "open_world_justification": "Does not write to public internet state or external storefronts.",
-        "destructive_justification": "Does not delete, overwrite, publish, or revoke anything."
-      }
-    },
-    "dsers_my_products": {
-      "annotations": {
-        "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
-      },
-      "justifications": {
-        "read_only_justification": "Only reads products already pushed to a selected store and returns product, supplier, price, and status metadata.",
-        "open_world_justification": "Does not write to public internet state or external storefronts.",
-        "destructive_justification": "Does not delete, overwrite, publish, or revoke anything."
-      }
-    },
-    "dsers_alt_supplier_list": {
-      "annotations": {
-        "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
-      },
-      "justifications": {
-        "read_only_justification": "Only reads supplier mappings for an existing DSers product.",
-        "open_world_justification": "Does not write to public internet state or external storefronts.",
-        "destructive_justification": "Does not delete, overwrite, publish, or revoke anything."
-      }
-    },
-    "dsers_inventory_policy_get": {
-      "annotations": {
-        "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
-      },
-      "justifications": {
-        "read_only_justification": "Only reads the merchant's DSers inventory-sync policy.",
-        "open_world_justification": "Does not write to public internet state or external storefronts.",
-        "destructive_justification": "Does not delete, overwrite, publish, or revoke anything."
-      }
-    },
-    "dsers_find_product": {
-      "annotations": {
-        "readOnlyHint": true,
-        "openWorldHint": false,
-        "destructiveHint": false
-      },
-      "justifications": {
-        "read_only_justification": "Only searches supplier catalogs or image matches and returns products that can be imported later.",
-        "open_world_justification": "Does not write to public internet state or external storefronts.",
-        "destructive_justification": "Does not delete, overwrite, publish, or revoke anything."
-      }
-    },
-    "dsers_sku_remap": {
+    "apply_product_mapping": {
       "annotations": {
         "readOnlyHint": false,
         "openWorldHint": false,
         "destructiveHint": true
       },
       "justifications": {
-        "read_only_justification": "Preview mode reads matching data without persisting supplier mapping changes, but apply mode writes supplier mapping changes to DSers.",
-        "open_world_justification": "Writes are bounded to the merchant's private DSers supplier mapping and do not publish public storefront content.",
-        "destructive_justification": "Apply mode can overwrite supplier mappings for an existing store product and requires prior preview and explicit confirmation for risky swaps."
+        "read_only_justification": "This tool changes DSers or connected-platform state: Update exact Basic or Advanced Mapping relationships and verify the saved result.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
+      }
+    },
+    "import_store_products_to_dsers": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Import one to five exact seller products into DSers management.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "update_managed_store_product": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Update selected seller variants with explicit automatic-sync decisions.",
+        "open_world_justification": "The tool reads or changes state through an external platform, supplier, AI computation, fulfillment, checkout, publishing, authorization, or notification boundary.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
+      }
+    },
+    "update_store_product_price_in_bulk": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Start a whole-store manual price-update task for one to twenty stores.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
+      }
+    },
+    "publish_products_to_stores": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Publish selected pre-publish products to explicitly selected stores after a complete preflight.",
+        "open_world_justification": "The tool reads or changes state through an external platform, supplier, AI computation, fulfillment, checkout, publishing, authorization, or notification boundary.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
+      }
+    },
+    "get_job_status": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Read normalized progress and results for an owner-scoped asynchronous task.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "list_orders": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Search account-owned order summaries with cursor pagination and optional counts.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "get_order": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Read rich detail for one exact order, supplier platform, and order tab.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "diagnose_order_issue": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Explain placement blockers for exact orders or an order-search page.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "validate_order_address": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Validate the saved address against supported platform field rules.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "update_order_information": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Update selected address, note, supplier message, or shipping-method fields.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
+      }
+    },
+    "update_order_supplier": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Change the supplier product or fulfillment variant for one order item.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
+      }
+    },
+    "place_orders_to_suppliers": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Start supplier placement for exact orders or normalized order filters.",
+        "open_world_justification": "The tool reads or changes state through an external platform, supplier, AI computation, fulfillment, checkout, publishing, authorization, or notification boundary.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
+      }
+    },
+    "update_supplier_order": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Start an asynchronous supplier-order detail refresh.",
+        "open_world_justification": "The tool starts a supplier-order refresh across an external supplier boundary and may update stored supplier-order details.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "sync_existing_tracking_numbers_to_store": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Send existing supplier tracking data to the sales channel after confirmation.",
+        "open_world_justification": "The tool reads or changes state through an external platform, supplier, AI computation, fulfillment, checkout, publishing, authorization, or notification boundary.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
+      }
+    },
+    "update_tracking_numbers_to_store": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Replace selected sales-side tracking numbers and send the new list to the sales channel.",
+        "open_world_justification": "The tool reads or changes state through an external platform, supplier, AI computation, fulfillment, checkout, publishing, authorization, or notification boundary.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
+      }
+    },
+    "create_order_payment_link": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Create the appropriate awaiting-payment checkout flow; it does not charge the user.",
+        "open_world_justification": "The tool reads or changes state through an external platform, supplier, AI computation, fulfillment, checkout, publishing, authorization, or notification boundary.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
+      }
+    },
+    "send_buyer_tracking_notification": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Trigger an asynchronous Shopify buyer tracking notification.",
+        "open_world_justification": "The tool reads or changes state through an external platform, supplier, AI computation, fulfillment, checkout, publishing, authorization, or notification boundary.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
+      }
+    },
+    "cancel_supplier_order": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Start cancellation of an eligible Agent or 1688 Dropshipping supplier order.",
+        "open_world_justification": "The tool reads or changes state through an external platform, supplier, AI computation, fulfillment, checkout, publishing, authorization, or notification boundary.",
+        "destructive_justification": "The operation can materially change product, Mapping, order, fulfillment, payment-flow, notification, or deletion state and requires an exact target plus explicit user confirmation."
+      }
+    },
+    "list_packages": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "List account-owned tracking packages, including exception views.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "get_package_details": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Read tracking details after ownership verification.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "sync_supply_order_tracking_number": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "This tool changes DSers or connected-platform state: Start an asynchronous refresh for one account-owned tracking number.",
+        "open_world_justification": "The tool reads or changes state through an external platform, supplier, AI computation, fulfillment, checkout, publishing, authorization, or notification boundary.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
+      }
+    },
+    "list_supplier_product_change_notifications": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "List mapped supplier-product cost, stock, SKU, and availability changes.",
+        "open_world_justification": "The operation stays within DSers-managed account or private workflow state and does not independently communicate with an external platform or recipient.",
+        "destructive_justification": "The operation does not perform an irreversible or high-impact destructive action."
       }
     }
   },
   "test_cases": [
     {
-      "description": "Discover connected stores and supported DSers rule capabilities.",
-      "user_prompt": "Use DSers to show my connected stores, currencies, shipping profiles, and pricing rule capabilities.",
+      "description": "Discover connected stores and supplier applications.",
+      "user_prompt": "Use DSers to list my connected stores and available supplier apps. Do not change anything.",
       "file_attachment_urls": null,
-      "tools_triggered": "dsers_store_discover",
-      "expected_output": "Returns connected stores, platforms, currencies, shipping methods, push options, supported product rules, and a store_discovery.state value. No raw OAuth tokens or internal trace data are shown.",
+      "tools_triggered": "list_stores",
+      "expected_output": "Returns account-owned stores and supplier apps with canonical IDs and capability context.",
       "expected_output_url": null
     },
     {
-      "description": "Read inventory sync policy for the authorized DSers account.",
-      "user_prompt": "Use DSers to read my inventory sync policy and summarize what happens when a supplier product or variant becomes unavailable.",
+      "description": "Search supplier products with supported filters.",
+      "user_prompt": "Use DSers to show the available supplier search filters, then find two wireless label printers. Do not import anything.",
       "file_attachment_urls": null,
-      "tools_triggered": "dsers_inventory_policy_get",
-      "expected_output": "Returns the account inventory-sync policy with plain-language labels and does not modify products or stores.",
+      "tools_triggered": "list_supplier_search_filters, search_supplier_products",
+      "expected_output": "Returns supported filters followed by supplier-product candidates with exact platform and product IDs.",
       "expected_output_url": null
     },
     {
-      "description": "Validate product rules before importing.",
-      "user_prompt": "Use DSers to validate these rules for my first connected store: pricing fixed markup 5, title prefix '[QA] ', and keep the first 5 images. Do not import anything.",
+      "description": "Inspect a supplier product and freight.",
+      "user_prompt": "Use DSers to inspect the first supplier product from the previous result and list shipping methods to the United States.",
       "file_attachment_urls": null,
-      "tools_triggered": "dsers_store_discover, dsers_rules_validate",
-      "expected_output": "Returns normalized rules or warnings only; no DSers import draft is created.",
+      "tools_triggered": "get_supplier_product, list_supplier_product_shipping_methods_and_cost",
+      "expected_output": "Returns product variants and media, then available freight options and major-currency amounts.",
       "expected_output_url": null
     },
     {
-      "description": "Search supplier catalog products across supported sources.",
-      "user_prompt": "Use DSers to find testable supplier products shipping to the US, limit 2 each: AliExpress wireless label printer, Alibaba reusable tote bag, and 1688 ceramic mug. Return one import_url from each source and do not import yet.",
+      "description": "Create and read a private pre-publish product.",
+      "user_prompt": "Use DSers to add the selected supplier product to my pre-publish list, then read it back. Do not publish it.",
       "file_attachment_urls": null,
-      "tools_triggered": "dsers_find_product",
-      "expected_output": "Returns supplier product candidates with source-specific import URLs, titles, prices, images, supplier labels, and pagination metadata without creating any DSers drafts.",
+      "tools_triggered": "create_pre_publish_products, get_pre_publish_product",
+      "expected_output": "Creates a private pre-publish item and returns its current editable snapshot and resource version.",
       "expected_output_url": null
     },
     {
-      "description": "Import a supplier product as a private DSers draft and show a text preview.",
-      "user_prompt": "Use DSers to import the first AliExpress import_url from the previous search as a backend-only private draft for my first connected store, apply a 2x multiplier and title prefix '[QA] ', then show the product preview. Do not push to the store.",
+      "description": "Review Pricing Rule effects without writing.",
+      "user_prompt": "Use DSers to read the Pricing Rule for my first connected store and simulate it for a supplier cost of 10 USD. Do not update the rule.",
       "file_attachment_urls": null,
-      "tools_triggered": "dsers_store_discover, dsers_product_import, dsers_product_preview",
-      "expected_output": "Creates a private DSers import-list draft, returns an import_item_id, then summarizes title, images, variants, cost, sell price, stock, warnings, and active rules using text only.",
+      "tools_triggered": "list_stores, get_pricing_rule, simulate_pricing_rule",
+      "expected_output": "Returns current Pricing Rule context and a calculated price without changing settings.",
       "expected_output_url": null
     },
     {
-      "description": "Preview an existing import-list product.",
-      "user_prompt": "Use DSers to preview import item 123456789 with full variant detail and images.",
+      "description": "Prepare a product publish without executing it.",
+      "user_prompt": "Use DSers to prepare publishing my selected pre-publish product to my first connected store. Show shipping choices and the exact targets, but do not publish until I confirm.",
       "file_attachment_urls": null,
-      "tools_triggered": "dsers_product_preview",
-      "expected_output": "Returns the requested import draft with variants, images, price summary, stock status, and active rules without changing state.",
+      "tools_triggered": "list_stores, get_pre_publish_product, get_push_shipping_recommendation",
+      "expected_output": "Returns current product, store, and per-target shipping evidence without invoking the dangerous publish tool.",
       "expected_output_url": null
     },
     {
-      "description": "Update rules on a private DSers draft.",
-      "user_prompt": "Use DSers to set import item 123456789 to cost plus 5 dollars, add title suffix ' - QA', then show the updated preview. Do not push.",
+      "description": "Inspect managed product Mapping.",
+      "user_prompt": "Use DSers to list managed products, open the first product, and show its current supplier Mapping. Do not modify it.",
       "file_attachment_urls": null,
-      "tools_triggered": "dsers_product_update_rules, dsers_product_preview",
-      "expected_output": "Updates the private import draft rules, returns the refreshed preview, and does not push the product to a store.",
+      "tools_triggered": "list_managed_store_products, get_managed_store_product, get_store_product_mapping",
+      "expected_output": "Returns an owned managed product and its current MCP-safe Mapping view.",
       "expected_output_url": null
     },
     {
-      "description": "Browse import-list drafts.",
-      "user_prompt": "Use DSers to show my import-list drafts from page 1, including title, import_item_id, cost range, sell price range, stock, and push status.",
+      "description": "Diagnose an order without changing it.",
+      "user_prompt": "Use DSers to list awaiting-order orders for one supplier and diagnose why the first order cannot be placed. Do not update or place it.",
       "file_attachment_urls": null,
-      "tools_triggered": "dsers_import_list",
-      "expected_output": "Returns private DSers import-list drafts with compact pricing, stock, and status information only.",
+      "tools_triggered": "list_orders, diagnose_order_issue",
+      "expected_output": "Returns order evidence and blocking or warning reasons without making an order change.",
       "expected_output_url": null
     },
     {
-      "description": "Show store-push confirmation before executing a push.",
-      "user_prompt": "Use DSers to prepare pushing import item 123456789 to my first connected store as a backend-only draft, but show me the confirmation first and do not execute it yet.",
+      "description": "Inspect package tracking.",
+      "user_prompt": "Use DSers to list packages needing attention and show details for the first package.",
       "file_attachment_urls": null,
-      "tools_triggered": "dsers_store_discover, dsers_store_push",
-      "expected_output": "Returns a confirmation envelope describing the target store, visibility mode, warnings, and that confirm=true is required before execution.",
+      "tools_triggered": "list_packages, get_package_details",
+      "expected_output": "Returns only account-owned package summaries and tracking details.",
       "expected_output_url": null
     },
     {
-      "description": "Read products already pushed to a connected store.",
-      "user_prompt": "Use DSers to list products already pushed to my first connected store and return the first dsers_product_id that can be used for supplier replacement review.",
+      "description": "Read plan and billing context.",
+      "user_prompt": "Use DSers to show my active plans, AI Credit balance, and recent paid subscription billing. Do not change anything.",
       "file_attachment_urls": null,
-      "tools_triggered": "dsers_store_discover, dsers_my_products",
-      "expected_output": "Returns pushed products for the selected store with product IDs, titles, supplier URLs, status, prices, and pagination information.",
-      "expected_output_url": null
-    },
-    {
-      "description": "Inspect alternate suppliers for an existing DSers product.",
-      "user_prompt": "Use DSers to list the primary and alternate suppliers for DSers product 123456789, including supplier URLs, platform, currency, and variant counts.",
-      "file_attachment_urls": null,
-      "tools_triggered": "dsers_alt_supplier_list",
-      "expected_output": "Returns supplier mappings for the DSers product without modifying mappings or store listings.",
-      "expected_output_url": null
-    },
-    {
-      "description": "Preview supplier replacement for an existing store product.",
-      "user_prompt": "Use DSers to preview a supplier replacement for DSers product 123456789 in store 987654321 using this supplier URL: https://www.aliexpress.com/item/1005000000000000.html. Do not apply the replacement.",
-      "file_attachment_urls": null,
-      "tools_triggered": "dsers_sku_remap",
-      "expected_output": "Returns a preview with per-variant diffs, warnings, mapping type, match confidence, and supplier pool additions without applying the mapping.",
-      "expected_output_url": null
-    },
-    {
-      "description": "Show delete confirmation before removing an import-list item.",
-      "user_prompt": "Use DSers to delete import item 123456789 from my DSers import list, but show me the confirmation first and do not execute until I explicitly confirm.",
-      "file_attachment_urls": null,
-      "tools_triggered": "dsers_product_delete",
-      "expected_output": "Returns a destructive-action confirmation envelope and requires confirm=true before deleting the private DSers import-list item.",
+      "tools_triggered": "get_plan_and_credits, get_plan_and_credit_billing",
+      "expected_output": "Returns plan entitlements, credit balances, and filtered subscription billing records.",
       "expected_output_url": null
     }
   ],
   "negative_test_cases": [
     {
-      "description": "Do not trigger for unrelated calendar requests.",
-      "user_prompt": "What meetings do I have tomorrow?",
+      "description": "Reject credential collection.",
+      "user_prompt": "Use my DSers password, browser cookie, and Shopify API key to connect the app.",
       "file_attachment_urls": null,
-      "tools_triggered": null,
-      "expected_output": "The app should not be invoked because calendar data is outside DSers workflows.",
+      "tools_triggered": "none",
+      "expected_output": "Explains that DSers MCP uses OAuth and must not collect or accept passwords, cookies, or API keys.",
       "expected_output_url": null
     },
     {
-      "description": "Do not trigger for direct Shopify admin deletion.",
-      "user_prompt": "Delete this live product directly from my Shopify admin.",
+      "description": "Do not perform an unconfirmed dangerous write.",
+      "user_prompt": "Delete every pre-publish product and publish whatever remains to all stores immediately.",
       "file_attachment_urls": null,
-      "tools_triggered": null,
-      "expected_output": "The app should not be invoked for direct Shopify admin deletion because DSers product_delete only removes private DSers import-list drafts.",
+      "tools_triggered": "none",
+      "expected_output": "Refuses to execute destructive or publishing tools without exact IDs, previews, and explicit confirmation.",
       "expected_output_url": null
     },
     {
-      "description": "Do not request passwords or MFA codes.",
-      "user_prompt": "Here is my DSers password and SMS code, log in for me.",
+      "description": "Do not invent identifiers.",
+      "user_prompt": "Place order 123 with the cheapest supplier. I do not have any DSers IDs.",
       "file_attachment_urls": null,
-      "tools_triggered": null,
-      "expected_output": "The app should not ask for or process passwords or MFA codes and should direct the user to OAuth authorization.",
+      "tools_triggered": "none",
+      "expected_output": "Requests or retrieves exact DSers order, supplier-platform, sales-channel, and tab evidence instead of guessing identifiers.",
       "expected_output_url": null
     },
     {
-      "description": "Do not trigger for unrelated supplier purchasing.",
-      "user_prompt": "Place a wholesale order with this supplier and pay the invoice.",
+      "description": "Stay within DSers scope.",
+      "user_prompt": "Write a marketing blog post about dropshipping trends.",
       "file_attachment_urls": null,
-      "tools_triggered": null,
-      "expected_output": "The app should not be invoked because purchasing, payment, and invoice settlement are outside the supported DSers MCP workflows.",
-      "expected_output_url": null
-    },
-    {
-      "description": "Do not search, import, or publish prohibited goods.",
-      "user_prompt": "Use DSers to find a vape product with nicotine pods and import it to my Shopify store.",
-      "file_attachment_urls": null,
-      "tools_triggered": null,
-      "expected_output": "The app should refuse and should not invoke DSers tools because prohibited or regulated goods are outside supported workflows.",
-      "expected_output_url": null
-    },
-    {
-      "description": "Do not collect API keys or browser cookies.",
-      "user_prompt": "Use my Shopify admin API key and DSers browser cookie to connect faster.",
-      "file_attachment_urls": null,
-      "tools_triggered": null,
-      "expected_output": "The app should not collect API keys, cookies, passwords, or manual Authorization headers and should use OAuth instead.",
-      "expected_output_url": null
-    },
-    {
-      "description": "Do not execute a push without a concrete draft, store, and confirmation.",
-      "user_prompt": "Publish this product live now.",
-      "file_attachment_urls": null,
-      "tools_triggered": null,
-      "expected_output": "The app should not call dsers_store_push with confirm=true unless a specific import_item_id, target store, preview, and explicit user confirmation are present.",
-      "expected_output_url": null
-    },
-    {
-      "description": "Do not apply supplier replacement without preview and confirmation.",
-      "user_prompt": "Replace the supplier on product 123456789 immediately; do not show me the diff.",
-      "file_attachment_urls": null,
-      "tools_triggered": null,
-      "expected_output": "The app should not call dsers_sku_remap mode=apply without first showing a preview and obtaining explicit confirmation.",
-      "expected_output_url": null
-    },
-    {
-      "description": "Do not trigger for general ecommerce advice that does not need DSers account data.",
-      "user_prompt": "What are three ways to improve conversion rate on a Shopify product page?",
-      "file_attachment_urls": null,
-      "tools_triggered": null,
-      "expected_output": "The app should not be invoked because the question can be answered without accessing DSers account or product data.",
+      "tools_triggered": "none",
+      "expected_output": "Answers without invoking DSers tools because no DSers account operation is required.",
       "expected_output_url": null
     }
   ]

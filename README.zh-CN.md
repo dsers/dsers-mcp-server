@@ -1,12 +1,8 @@
 # DSers Official MCP Server
 
-DSers 官方 MCP Server，用于 AI 驱动的 dropshipping 自动化。
+DSers 官方托管的 Model Context Protocol 服务，让 AI 客户端可以操作 DSers 工作流。
 
-本服务为 DSers 官方 MCP Server，已在官方 MCP Registry 登记为 `io.github.dsers/dsers-mcp-server`。
-
-DSers Official MCP Server 是一个托管版远程 Model Context Protocol 服务，可让支持 MCP 的 AI 客户端和 ChatGPT Apps 调用 DSers 的选品、导入、商品优化、变体编辑、定价规则、店铺推送、供应商替换等工作流。
-
-本仓库**不包含 DSers MCP Server 后端源码**。本仓库只提供官方公开文档、连接信息、配置示例和 registry metadata，用于发布和接入 DSers 托管的远程 MCP 服务。
+这个 public 仓库提供 DSers 托管服务的连接信息、用户文档、示例和 Registry metadata，**不包含生产后端源码**。
 
 ## Remote MCP Endpoint
 
@@ -14,50 +10,40 @@ DSers Official MCP Server 是一个托管版远程 Model Context Protocol 服务
 https://ai.dsers.com/mcp
 ```
 
-## Transport
+服务使用 Streamable HTTP，不提供本地 stdio server。
 
-Remote HTTP / Streamable HTTP。
+## 认证
 
-这个 MCP 是远程 HTTP 服务，不提供本地 stdio server。
+DSers MCP 使用 OAuth 2.1 + PKCE。MCP 客户端只需要配置 server URL。不要把 DSers 密码、API key、店铺 token、浏览器 cookie 或手工复制的 `Authorization` header 写入客户端配置。
 
-## 认证方式
+Protected Resource Metadata 地址：
 
-DSers MCP 使用 OAuth 2.1 + PKCE。
+```text
+https://ai.dsers.com/.well-known/oauth-protected-resource
+```
 
-不要手动配置 API key。  
-不要手动写 `Authorization` header。  
-不要把 DSers 后台 API key、店铺 token 或浏览器 cookie 粘贴到 MCP 客户端。
+授权后，服务会根据登录身份的 role 和 OAuth scopes 过滤并校验可用工具。详见[认证说明](docs/zh-CN/auth.md)。
 
-首次调用工具时，支持的 MCP 客户端会打开 DSers 授权页面。用户登录并授权后，即可调用 DSers MCP tools。
+## 当前能力
 
-详细说明见：[认证说明](docs/zh-CN/auth.md)。
+当前服务提供 60 个工具，覆盖：
 
-## 前置条件
+- 账号资料、套餐、AI Credits、账单与发票
+- 已连接店铺、店铺连接、重新授权与 Shopify Shipping Profile
+- 供应商筛选、商品搜索、商品详情与运费查询
+- 待发布商品、内容、价格、分类、Organization 与 Pricing Rule
+- 已发布商品、供应商 Mapping 与 AI Mapping
+- 商品发布与异步任务状态查询
+- 订单搜索、诊断、修改、下单、付款、取消与履约
+- 包裹、Tracking Number、买家通知与供应商品变更通知
 
-使用者需要：
+服务只声明 MCP Tools，不提供 MCP Prompts、Resources 或 iframe widget。
 
-- 一个可用的 DSers 账号
-- DSers 已连接至少一个 Shopify 或 Wix 店铺
-- 一个支持远程 HTTP MCP 和 OAuth 2.1 + PKCE 的 MCP 客户端
-
-已验证客户端（端到端测试通过）：ChatGPT Developer Mode、Claude Desktop、Cursor、Claude Code、Codex CLI、OpenClaw。
-
-预期可用（具备远程 HTTP + OAuth 2.1 + PKCE 支持的 MCP 客户端）：VS Code、Cline、Windsurf、Zed、Continue。
-
-## 可实现能力
-
-- 从 AliExpress、Alibaba、1688、Accio 或支持的供应商来源导入商品
-- 给商品应用定价、标题、描述、图片、变体规则
-- 预览 DSers draft，再推送到 Shopify 或 Wix
-- 搜索 DSers 商品池
-- 浏览 DSers import list 和已推送商品
-- 对已上架商品做 SKU 级供应商替换
+完整清单见[工具文档](docs/zh-CN/tools.md)。
 
 ## 快速开始
 
-### Claude Desktop
-
-在 `claude_desktop_config.json` 添加：
+### 通用 MCP 配置
 
 ```json
 {
@@ -70,7 +56,7 @@ DSers MCP 使用 OAuth 2.1 + PKCE。
 }
 ```
 
-重启 Claude Desktop。首次调用工具时，客户端会触发 OAuth 并打开 DSers 登录页。
+首次连接时，在 MCP 客户端中点击 Sign in、Connect、Authorize 或 Login，并在浏览器中完成 DSers 授权。
 
 ### Claude Code
 
@@ -79,98 +65,48 @@ claude mcp add dsers https://ai.dsers.com/mcp --transport http
 claude mcp login dsers
 ```
 
-### Cursor
-
-打开：
-
-```text
-Settings → Tools & Integrations → MCP Tools → Add / Connect
-```
-
-填入：
-
-```text
-https://ai.dsers.com/mcp
-```
-
-Cursor 会自动走 OAuth 授权流程。
-
 ### Codex CLI
 
-添加 MCP server 后执行：
+添加 server 后运行：
 
 ```bash
 codex mcp login dsers
 ```
 
-如果客户端要求填写 URL，使用：
-
-```text
-https://ai.dsers.com/mcp
-```
-
 ### ChatGPT App
 
-在 ChatGPT Developer Mode 或 Apps dashboard 中使用远程 endpoint：
+在 ChatGPT Developer Mode 或 Apps dashboard 中添加 `https://ai.dsers.com/mcp`。当前集成是 data-only，返回普通 MCP tool result，不使用 iframe widget。
 
-```text
-https://ai.dsers.com/mcp
-```
+## 安全模型
 
-当前 ChatGPT 提交目标是 data-only：DSers 只暴露普通 MCP tools，不依赖 iframe widget。见 [ChatGPT App 提交说明](docs/chatgpt-app-submission.md)。
+工具分为 read、write、dangerous 三类。状态变更流程使用精确资源 ID、归属校验、OAuth scopes、必要的旧状态校验，并要求在危险调用前取得用户明确确认。如果写请求发出后无法确认上游结果，服务会返回不可自动重试的错误；客户端应先重新读取当前状态。
 
-### OpenClaw
-
-```bash
-openclaw mcp set dsers '{"url":"https://ai.dsers.com/mcp","transport":"streamable-http"}'
-```
-
-不同 OpenClaw 部署形态支持的 transport 和授权入口可能不同，请以当前环境的连接向导为准。
+工具使用结构化错误码，帮助客户端区分重新授权、scope 不足、套餐限制、频率限制、参数错误以及结果未知的上游写入。
 
 ## 文档
 
 - [认证说明](docs/zh-CN/auth.md)
 - [工具清单](docs/zh-CN/tools.md)
+- [用户指南](docs/zh-CN/user-guide.zh-CN.md)
+- [使用示例](docs/zh-CN/examples.md)
 - [隐私与安全](docs/zh-CN/privacy.md)
 - [ChatGPT App 提交说明](docs/chatgpt-app-submission.md)
-- [ChatGPT App E2E 测试链路](docs/chatgpt-app-e2e-playbook.md)
-- [托管部署说明](docs/deployment.md)
-- [示例](docs/zh-CN/examples.md)
+- [ChatGPT App E2E 测试](docs/chatgpt-app-e2e-playbook.md)
+- [托管服务说明](docs/deployment.md)
 - [English README](README.md)
-
-## 示例 MCP 客户端配置
-
-```json
-{
-  "mcpServers": {
-    "dsers": {
-      "type": "http",
-      "url": "https://ai.dsers.com/mcp"
-    }
-  }
-}
-```
-
-最小配置示例也可以查看 [`examples/remote-mcp.json`](examples/remote-mcp.json)。
 
 ## Registry 与审核文件
 
-- [`server.json`](server.json) - 托管远程 MCP server 的 registry metadata
-- [`manifest.json`](manifest.json) - 公开 app metadata、工具列表、prompt 模板和隐私政策 URL
-- [`chatgpt-app-submission.json`](chatgpt-app-submission.json) - ChatGPT App 审核辅助文件，包含工具 hint 和测试 prompts
+- [`server.json`](server.json) — MCP Registry metadata
+- [`manifest.json`](manifest.json) — 公开 app metadata 和工具清单
+- [`chatgpt-app-submission.json`](chatgpt-app-submission.json) — ChatGPT App 审核 metadata 与测试用例
 
 ## License
 
-本公开文档和 metadata 仓库使用 [Apache License 2.0](LICENSE)。
+本仓库的公开文档与 metadata 使用 [Apache License 2.0](LICENSE)。
 
 ## Support
 
-普通文档、连接、客户端兼容性或使用问题，请提交 GitHub Issue：
+普通文档、连接、客户端兼容性或使用问题，请提交 [GitHub Issue](https://github.com/dsers/dsers-mcp-server/issues)。
 
-```text
-https://github.com/dsers/dsers-mcp-server/issues
-```
-
-漏洞、token 或账号敏感数据问题，请联系：
-
-zhaohaoduo@dsers.com
+漏洞、token 或账号敏感数据问题请联系 `zhaohaoduo@dsers.com`。

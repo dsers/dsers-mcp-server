@@ -1,328 +1,129 @@
 # Tools
 
-The DSers Official MCP Server provides tools for AI-powered dropshipping workflows.
+The DSers Official MCP Server currently exposes 60 tools. The server advertises tools only; it does not expose MCP prompts or resources.
 
-## Recommended First Call
+Tool availability is filtered by the authenticated role and OAuth scopes. All registered tools support the `admin`, `dsers`, and `mcp` roles. Most tools require one or more scopes, while `find_feature_entry` intentionally accesses no protected business resource.
 
-### `dsers_store_discover`
+## Account, plans, billing, and navigation
 
-Returns linked stores and supported rule capabilities. Call this first in most workflows.
+| Tool | Risk | Purpose |
+|---|---|---|
+| `get_account_profile` | read | Read the authenticated account profile, timezone, permissions, and subaccounts. |
+| `get_plan_and_credits` | read | Read active subscriptions, plan benefits, and current AI Credit balances. |
+| `get_plan_and_credit_billing` | read | Read subscription purchases or AI Credit usage, or obtain an invoice download URL. |
+| `get_order_paymentlink_and_billing` | read | Search account-owned order billing records. |
+| `recommend_apps_to_install` | read | Discover visible seller and supplier apps that are not installed. It never installs an app. |
+| `find_feature_entry` | read | Find a DSers page URL when no MCP tool supports the requested feature. Ask before opening it. |
 
-Common input:
+## Stores and platform settings
 
-- `target_store`: optional store ID or name filter
+| Tool | Risk | Purpose |
+|---|---|---|
+| `list_stores` | read | List connected stores, supplier apps, currencies, Pricing Rule context, Shipping Profiles, and publishing capabilities. |
+| `list_shopify_shipping_zones` | read | List Shopify Markets countries or regions for one owned Shopify store. |
+| `create_shopify_shipping_profile` | write | Create one Shopify Shipping Profile with a zone and flat rate after explicit confirmation. |
+| `list_supported_countries` | read | List DSers-supported countries with stable IDs and ISO codes. |
+| `list_platform_shipping_methods` | read | List supplier shipping services for one platform and destination. |
+| `start_store_connection` | write | Return the signed authorization URL needed to connect a visible seller or supplier app. |
+| `start_store_reauthorization` | write | Return a reauthorization URL for one owned store. |
 
-Key output:
+## Supplier discovery
 
-- `store_discovery.state`
-- `stores[].id`
-- `stores[].name`
-- `stores[].platform`
-- `stores[].currency`
-- `stores[].ship`
-- `rules.pricing`
-- `rules.content`
-- `rules.images`
-- `plan_issue`
+| Tool | Risk | Purpose |
+|---|---|---|
+| `list_supplier_search_filters` | read | Discover supplier apps, categories, and supported search filters. |
+| `search_supplier_products` | read | Search supplier products by keyword, image, category, price, and platform filters. |
+| `list_featured_product_collections` | read | List curated product-idea collections. |
+| `get_supplier_product` | read | Read supplier product options, variants, inventory, media, and source URL. |
+| `list_supplier_product_shipping_methods_and_cost` | read | Read available shipping methods and freight quotes for a supplier product. |
 
-`store_discovery.state` helps clients distinguish connected stores from missing stores, authorization problems, upstream failures, unrecognized response shapes, and target-store misses. Successful discovery may also include `mcp_update` guidance when the client should refresh, reauthorize, or reinstall the MCP connection.
+## Pre-publish products and Pricing Rules
 
-## Rule Validation
+| Tool | Risk | Purpose |
+|---|---|---|
+| `list_pre_publish_products` | read | Search the DSers pre-publish/import list with stable pagination. |
+| `get_pre_publish_product` | read | Read the editable snapshot and resource version of one pre-publish product. |
+| `get_pre_publish_product_organization` | read | Read Category and Organization choices and current selections for up to 100 products. |
+| `get_push_shipping_recommendation` | read | Read per-product, per-store shipping candidates while preparing a publish request. |
+| `get_pricing_rule` | read | Read complete Basic, Advanced, and AI Custom Pricing Rule state for one store. |
+| `create_pre_publish_products` | write | Add one to ten exact supplier products to the pre-publish list. |
+| `update_pre_publish_product_content` | dangerous | Update content, media, package data, options, variants, SKUs, or stock using a current resource version. |
+| `update_pre_publish_product_price` | dangerous | Update exact variant prices or one fixed price after preview and explicit confirmation. |
+| `update_pre_publish_product_organization` | write | Update Category, Organization, or URL-handle fields for up to 100 products. |
+| `update_pricing_rule` | write | Update supported Pricing Rule, cents, and store-exchange-rate sections. |
+| `delete_pre_publish_products` | dangerous | Delete one to twenty exact pre-publish product IDs; filtered deletion first freezes exact IDs. |
 
-### `dsers_rules_validate`
+## Managed products and Mapping
 
-Validates a rule object before import or update. Use it for pricing, content, image, and variant rules.
-
-Common input:
-
-- `rules`: JSON string
-- `target_store`: optional
-
-Example:
-
-```json
-{
-  "pricing": {
-    "mode": "fixed_markup",
-    "fixed_markup": 5
-  },
-  "content": {
-    "title_prefix": "[US] "
-  },
-  "images": {
-    "keep_first_n": 5
-  }
-}
-```
-
-## Product Search and Import
-
-### `dsers_find_product`
-
-Searches the DSers product pool by keyword or image URL.
-
-Common input:
-
-- `keyword`
-- `image_url`: visual search; takes priority over `keyword`
-- `supplier`: `aliexpress`, `alibaba`, or `ali1688`
-- `ship_to`: destination country, default `US`
-- `ship_from`: origin country
-- `sort`: `relevance`, `newest`, or `price`
-- `limit`: max 50
-- `search_after`: pagination cursor
-
-Use the returned `import_url` directly with `dsers_product_import`.
-
-### `dsers_product_import`
-
-Imports supplier products into the DSers import list and returns a preview.
-
-Common input:
-
-- `source_url`: single product URL
-- `source_urls_json`: batch JSON array
-- `source_hint`: `auto`, `aliexpress`, `alibaba`, or `accio`
-- `country`: country code, default `US`
-- `target_store`: store ID or name
-- `visibility_mode`: `backend_only` or `sell_immediately`
-- `rules_json`: JSON string
-- `batch_detail`: `summary` or `full`
-
-Flat rule inputs are also supported:
-
-- `pricing_mode`
-- `pricing_multiplier`
-- `pricing_fixed_markup`
-- `pricing_fixed_price`
-- `title_override`
-- `title_prefix`
-- `title_suffix`
-- `description_override_html`
-- `description_append_html`
-
-Key output:
-
-- `import_item_id`
-- `title`
-- `price_summary`
-- `variant_count`
-- `active_rules`
-
-`import_item_id` is the persistent handle for preview, update, push, and delete.
-
-## Draft Preview and Updates
-
-### `dsers_product_preview`
-
-Reloads a DSers import draft by `import_item_id`.
-
-Common input:
-
-- `import_item_id`
-- `variant_detail`: `compact` or `full`
-- `variant_offset`
-- `variant_limit`
-- `show_all_options`
-- `include_images`
-
-Usage notes:
-
-- `compact` is best for quickly listing all SKUs.
-- Use `full` when cost, compare-at price, or supplier quantity is needed.
-- Use `show_all_options=true` before editing options.
-- Use `include_images=true` when matching variants visually.
-
-### `dsers_product_update_rules`
-
-Updates pricing, content, image, or variant rules on an already imported draft.
-
-Common input:
-
-- `import_item_id`
-- `rules_json`
-- `target_store`
-- `visibility_mode`
-
-Merge behavior:
-
-- `pricing`, `images`, and `variant_overrides` replace their rule family.
-- `title_prefix`, `title_suffix`, and `description_append_html` are slots; each new value replaces the old slot value.
-- `option_edits` is a full replacement, not an incremental merge.
-- `remove_value` option edits remove the matching draft variants.
-- Use `{"pricing": null}` to remove a whole rule family.
-
-If persisting rules to DSers fails, the tool returns an error to prevent later pushes from using stale draft values.
-
-## Lists and Published Products
-
-### `dsers_import_list`
-
-Lists DSers import-list drafts.
-
-Common input:
-
-- `page`
-- `page_size`
-
-Key output:
-
-- `import_item_id`
-- `title`
-- `sell_price_range`
-- `cost_range`
-- `variant_count`
-- `total_stock`
-- `push_status`
-- `source_url`
-
-### `dsers_my_products`
-
-Lists products already pushed to a specific store.
-
-Common input:
-
-- `store_id`: from `dsers_store_discover`
-- `page`
-- `page_size`
-
-Key output:
-
-- `dsers_product_id`
-- `title`
-- `sell_price`
-- `cost`
-- `status`
-- `supplier_url`
-
-`dsers_product_id` is required for `dsers_sku_remap`.
+| Tool | Risk | Purpose |
+|---|---|---|
+| `list_managed_store_products` | read | Search DSers-managed store products and Mapping status. |
+| `search_store_products` | read | Search seller-platform products and see whether each is already imported. |
+| `get_managed_store_product` | read | Read seller variants, supplier mappings, media, sync settings, and inventory. |
+| `get_store_product_mapping` | read | Read the MCP-safe Basic or Advanced Mapping view for a managed product. |
+| `simulate_pricing_rule` | read | Calculate seller prices from supplied or mapped supplier costs. |
+| `search_ai_mapping_candidates` | read | Search visual supplier candidates and read the latest AI Mapping Job status. |
+| `start_ai_product_mapping` | dangerous | Create an AI Mapping computation for an exact product and supplier candidate. |
+| `apply_ai_mapping` | dangerous | Apply one successful AI Mapping task after a fresh preview and second confirmation. |
+| `apply_product_mapping` | dangerous | Update exact Basic or Advanced Mapping relationships and verify the saved result. |
+| `import_store_products_to_dsers` | write | Import one to five exact seller products into DSers management. |
+| `update_managed_store_product` | dangerous | Update selected seller variants with explicit automatic-sync decisions. |
+| `update_store_product_price_in_bulk` | dangerous | Start a whole-store manual price-update task for one to twenty stores. |
 
 ## Publishing
 
-### `dsers_store_push`
+| Tool | Risk | Purpose |
+|---|---|---|
+| `publish_products_to_stores` | dangerous | Publish selected pre-publish products to explicitly selected stores after a complete preflight. |
+| `get_job_status` | read | Read normalized progress and results for an owner-scoped asynchronous task. |
 
-Pushes import drafts to Shopify or Wix.
+Successful publishing returns `task_type` and `task_id`. Use both values with `get_job_status`; do not guess that task creation means every target has completed.
 
-Common input:
+## Orders and fulfillment
 
-- `import_item_id`
-- `import_item_ids_json`
-- `target_store`
-- `target_stores_json`
-- `visibility_mode`
-- `push_options_json`
-- `force_push`
+| Tool | Risk | Purpose |
+|---|---|---|
+| `list_orders` | read | Search account-owned order summaries with cursor pagination and optional counts. |
+| `get_order` | read | Read rich detail for one exact order, supplier platform, and order tab. |
+| `diagnose_order_issue` | read | Explain placement blockers for exact orders or an order-search page. |
+| `validate_order_address` | read | Validate the saved address against supported platform field rules. |
+| `update_order_information` | dangerous | Update selected address, note, supplier message, or shipping-method fields. |
+| `update_order_supplier` | dangerous | Change the supplier product or fulfillment variant for one order item. |
+| `place_orders_to_suppliers` | dangerous | Start supplier placement for exact orders or normalized order filters. |
+| `update_supplier_order` | write | Start an asynchronous supplier-order detail refresh. |
+| `sync_existing_tracking_numbers_to_store` | dangerous | Send existing supplier tracking data to the sales channel after confirmation. |
+| `update_tracking_numbers_to_store` | dangerous | Replace selected sales-side tracking numbers and send the new list to the sales channel. |
+| `create_order_payment_link` | dangerous | Create the appropriate awaiting-payment checkout flow; it does not charge the user. |
+| `send_buyer_tracking_notification` | dangerous | Trigger an asynchronous Shopify buyer tracking notification. |
+| `cancel_supplier_order` | dangerous | Start cancellation of an eligible Agent or 1688 Dropshipping supplier order. |
 
-Recommended default:
+## Packages and supplier changes
 
-```json
-{
-  "visibility_mode": "backend_only"
-}
-```
+| Tool | Risk | Purpose |
+|---|---|---|
+| `list_packages` | read | List account-owned tracking packages, including exception views. |
+| `get_package_details` | read | Read tracking details after ownership verification. |
+| `sync_supply_order_tracking_number` | write | Start an asynchronous refresh for one account-owned tracking number. |
+| `list_supplier_product_change_notifications` | read | List mapped supplier-product cost, stock, SKU, and availability changes. |
 
-Safety checks:
+## Safety and consistency rules
 
-- Blocks below-cost pricing
-- Blocks zero price
-- Blocks all-zero variant stock
-- Blocks empty variants
-- Warns on low margin, low stock, or very low price
+- Tool inputs never expose `confirm`, `confirmation_id`, or `idempotency_key`.
+- Dangerous operations require the agent to show the exact target and material effect, then obtain explicit user confirmation before the call.
+- Callers must copy exact IDs from earlier DSers tool results and must not infer store, product, supplier, order, task, or variant identifiers.
+- Versioned mutations must use the latest resource version returned by the relevant read tool.
+- Writes with an uncertain upstream outcome are not automatically retryable. Re-read the current state before deciding the next step.
+- Asynchronous creation is not final completion. Poll `get_job_status` with the returned `task_type + task_id`.
 
-Use `force_push=true` only after showing the exact risk to the user and receiving explicit confirmation.
+## Structured errors
 
-## Deletion
+Tool failures return machine-readable JSON. Important codes include:
 
-### `dsers_product_delete`
-
-Deletes an item from the DSers import list. This is irreversible.
-
-Common input:
-
-- `import_item_id`
-- `confirm`
-
-Protocol:
-
-1. First call without `confirm=true`.
-2. Show the confirmation response to the user.
-3. Call again with `confirm=true` only after explicit approval.
-
-This does not delete already published storefront listings.
-
-## Inventory Policy
-
-### `dsers_inventory_policy_get`
-
-Reads the DSers account inventory sync policy.
-
-Key output:
-
-- supplier product unavailable behavior
-- single variant unavailable behavior
-- auto-sync stock behavior
-- plain-language labels for each setting
-
-This is read-only and does not change account settings.
-
-## Supplier Replacement
-
-### `dsers_alt_supplier_list`
-
-Lists the primary and alternate suppliers mapped to an existing DSers product.
-
-Common input:
-
-- `dsers_product_id`
-- `variant_detail`
-
-Key output:
-
-- supplier URL
-- supplier platform and app ID
-- product title and image
-- variant count
-- supplier-native currency and currency source
-
-Use this before choosing a supplier URL for `dsers_sku_remap`.
-
-### `dsers_sku_remap`
-
-Replaces the supplier for an already pushed store product with SKU-level matching.
-
-Modes:
-
-- Strict: provide `new_supplier_url`
-- Discover: omit `new_supplier_url`; the tool reverse-image-searches candidates
-
-Common input:
-
-- `dsers_product_id`: from `dsers_my_products`
-- `store_id`: from `dsers_store_discover`
-- `new_supplier_url`: optional
-- `mode`: `preview` or `apply`
-- `country`: default `US`
-- `auto_confidence`: default 70
-- `max_candidates`: Discover mode candidate count
-
-Correct sequence:
-
-1. Call with `mode=preview`.
-2. Review `diffs`, `summary`, `top_candidates`, and `warnings`.
-3. Confirm the mapping.
-4. Call again with `mode=apply`.
-
-Do not skip preview.
-
-## Prompt Templates
-
-The server also exposes four prompt/workflow templates:
-
-| Name | Purpose |
-| --- | --- |
-| `dsers_workflow_quick-import` | Import one product and push it as a draft |
-| `dsers_workflow_bulk-import` | Batch import products with a pricing multiplier |
-| `dsers_workflow_multi-push` | Push one product to all connected Shopify or Wix stores |
-| `dsers_workflow_seo-optimize` | Import, rewrite title/description with the LLM, then push |
-
-These are optional client-side workflow shortcuts, not required tool calls.
+- `UNAUTHORIZED` — the token is missing, invalid, or expired.
+- `FORBIDDEN` — the identity is not allowed to use the tool or resource.
+- `INSUFFICIENT_SCOPE` — reauthorize with the scopes listed in `required_scopes`.
+- `PLAN_RESTRICTION` — the current plan or AI Credit entitlement does not allow the operation.
+- `VALIDATION_ERROR` — correct the supplied arguments before retrying.
+- `RATE_LIMITED` — wait for the returned rate-limit window.
+- `UPSTREAM_TIMEOUT` or `UPSTREAM_ERROR` — retry only when `retryable` is true.
+- `UPSTREAM_UNKNOWN` — a write may have reached DSers; inspect current state and do not automatically retry.
