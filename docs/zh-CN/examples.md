@@ -100,6 +100,43 @@ dangerous 的价格或内容修改前，必须展示精确的前后变化并取�
 
 按精确 ID 删除时，先展示目标并取得确认，再调用 `delete_pre_publish_products`。按条件删除时，先用 `list_pre_publish_products` 固定精确 ID。工具不接受 `confirm` 参数。
 
+## 请求体示例
+
+`create_pre_publish_products` 单次最多接受 10 个 item：
+
+```json
+{
+  "items": [
+    { "supplier_platform_id": "1", "supplier_product_id": "1005000000000000" },
+    { "supplier_platform_id": "2", "supplier_product_id": "60123456789" }
+  ]
+}
+```
+
+`update_pre_publish_product_content` 按 `import_item_id` 编辑内容、媒体和变体：
+
+```json
+{
+  "import_item_id": "123456",
+  "supplier_product_title": "Portable Mini Blender",
+  "supplier_product_description": "<p>Compact USB rechargeable blender for travel and office use.</p>",
+  "delete_variants": [
+    { "supplier_product_variant_id": "v3" }
+  ]
+}
+```
+
+`update_pre_publish_product_price` 可以设置统一固定价，或通过 `supplier_product_variant_list` 编辑指定变体行：
+
+```json
+{
+  "import_item_id": "123456",
+  "dsers_store_id": "789",
+  "mode": "fixed_price",
+  "fixed_price": "19.99"
+}
+```
+
 ## 处理失败
 
 - `INSUFFICIENT_SCOPE`：按 `required_scopes` 重新授权。

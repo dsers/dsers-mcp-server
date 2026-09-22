@@ -100,6 +100,43 @@ Recommended sequence:
 
 For explicit IDs, show the exact products and ask for confirmation before `delete_pre_publish_products`. For filter-based deletion, call `list_pre_publish_products` first and freeze the exact IDs. The tool does not accept a `confirm` parameter.
 
+## Request body examples
+
+`create_pre_publish_products` accepts up to 10 items per call:
+
+```json
+{
+  "items": [
+    { "supplier_platform_id": "1", "supplier_product_id": "1005000000000000" },
+    { "supplier_platform_id": "2", "supplier_product_id": "60123456789" }
+  ]
+}
+```
+
+`update_pre_publish_product_content` edits content, media, and variants by `import_item_id`:
+
+```json
+{
+  "import_item_id": "123456",
+  "supplier_product_title": "Portable Mini Blender",
+  "supplier_product_description": "<p>Compact USB rechargeable blender for travel and office use.</p>",
+  "delete_variants": [
+    { "supplier_product_variant_id": "v3" }
+  ]
+}
+```
+
+`update_pre_publish_product_price` sets one fixed price, or edits exact variant rows via `supplier_product_variant_list`:
+
+```json
+{
+  "import_item_id": "123456",
+  "dsers_store_id": "789",
+  "mode": "fixed_price",
+  "fixed_price": "19.99"
+}
+```
+
 ## Handle failures
 
 - `INSUFFICIENT_SCOPE`: reauthorize with `required_scopes`.
