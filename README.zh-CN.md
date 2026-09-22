@@ -67,9 +67,8 @@ claude mcp login dsers
 
 ### Codex CLI
 
-添加 server 后运行：
-
 ```bash
+codex mcp add dsers --url https://ai.dsers.com/mcp
 codex mcp login dsers
 ```
 
