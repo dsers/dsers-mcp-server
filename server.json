@@ -2,22 +2,15 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.dsers/dsers-mcp-server",
   "title": "DSers Official MCP Server",
-  "description": "Official DSers MCP for account, store, supplier-product, publishing, Mapping, order, billing, and tracking workflows.",
-  "version": "1.8.4",
+  "description": "Official DSers MCP for AliExpress Dropshipping: product sourcing, publishing, orders, and tracking.",
+  "version": "1.8.5-1",
   "websiteUrl": "https://www.dsers.com",
   "icons": [
     {
-      "src": "https://img.dsers.com/images/logo.png",
+      "src": "https://img.dsers.com/webSite/logo.png",
       "mimeType": "image/png",
       "sizes": [
-        "218x56"
-      ]
-    },
-    {
-      "src": "https://img.dsers.com/images/logo.svg",
-      "mimeType": "image/svg+xml",
-      "sizes": [
-        "any"
+        "1000x1000"
       ]
     }
   ],
@@ -28,7 +21,7 @@
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://ai.dsers.com/mcp"
+      "url": "https://ai.dsers.com/mcp/mcp-registry"
     }
   ]
 }
