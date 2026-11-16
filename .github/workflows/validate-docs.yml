@@ -14,7 +14,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Validate Registry metadata JSON
         run: python -m json.tool server.json > /dev/null
