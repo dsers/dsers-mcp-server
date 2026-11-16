@@ -1,0 +1,28 @@
+name: Validate public documentation
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Validate Registry metadata JSON
+        run: python -m json.tool server.json > /dev/null
+
+      - name: Check public documentation files
+        run: |
+          test -s README.md
+          test -s README.zh-CN.md
+          test -s docs/auth.md
+          test -s docs/glama.md
+          test -s docs/zh-CN/glama.md

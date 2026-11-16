@@ -1,6 +1,6 @@
-# DSers Official MCP Server
+# DSers Dropshipping MCP
 
-Official hosted Model Context Protocol server for operating DSers workflows from AI clients.
+Official DSers MCP for AliExpress dropshipping, product sourcing, and order fulfillment. Discover products across AliExpress, Alibaba, and 1688; import them to connected Shopify, Wix, WooCommerce, and TikTok Shop stores; then edit listings, set prices, and publish. Manage supplier products and orders, coordinate fulfillment, and track shipments from your AI assistant.
 
 This public repository contains connection information, user documentation, examples, and registry metadata for the DSers-hosted service. It does **not** contain the production backend source code.
 
@@ -84,6 +84,7 @@ Tool failures use structured error codes so clients can distinguish reauthorizat
 
 ## Documentation
 
+- [Connect with Glama](docs/glama.md)
 - [Authentication](docs/auth.md)
 - [Tools](docs/tools.md)
 - [User guide](docs/user-guide.en.md)
