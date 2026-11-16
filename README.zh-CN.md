@@ -1,6 +1,6 @@
-# DSers Official MCP Server
+# DSers Dropshipping MCP
 
-DSers 官方托管的 Model Context Protocol 服务，让 AI 客户端可以操作 DSers 工作流。
+DSers 官方 MCP，支持 AliExpress Dropshipping、商品采购与订单履约。通过 AI 助手发现 AliExpress、Alibaba 和 1688 商品，导入已连接的 Shopify、Wix、WooCommerce 和 TikTok Shop 店铺，编辑商品内容、设置价格并发布；管理供应商商品与订单，协调履约并追踪物流。
 
 这个 public 仓库提供 DSers 托管服务的连接信息、用户文档、示例和 Registry metadata，**不包含生产后端源码**。
 
@@ -84,6 +84,7 @@ codex mcp login dsers
 
 ## 文档
 
+- [通过 Glama 连接](docs/zh-CN/glama.md)
 - [认证说明](docs/zh-CN/auth.md)
 - [工具清单](docs/zh-CN/tools.md)
 - [用户指南](docs/zh-CN/user-guide.zh-CN.md)
