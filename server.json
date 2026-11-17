@@ -3,7 +3,7 @@
   "name": "io.github.dsers/dsers-mcp-server",
   "title": "DSers Official MCP Server",
   "description": "Official DSers MCP for AliExpress Dropshipping: product sourcing, publishing, orders, and tracking.",
-  "version": "1.8.5-1",
+  "version": "1.8.5-2",
   "websiteUrl": "https://www.dsers.com",
   "icons": [
     {
@@ -22,6 +22,10 @@
     {
       "type": "streamable-http",
       "url": "https://ai.dsers.com/mcp/mcp-registry"
+    },
+    {
+      "type": "streamable-http",
+      "url": "https://ai.dsers.com/mcp/glama"
     }
   ]
 }
